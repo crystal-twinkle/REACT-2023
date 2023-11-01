@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './assets/App.css';
 import Search from './components/Search';
 import PostList from './components/PostList';
@@ -6,67 +6,47 @@ import { IPost } from './components/models';
 import PokemonApi from './API/api';
 import Loading from './components/Loading';
 
-class App extends React.Component {
-  state = {
-    data: [],
-    newData: [],
-    isLoading: false,
-    query: localStorage.getItem('search') || '',
-    isError: false,
-  };
+const App = () => {
+  const [newData, setNewData] = useState<IPost[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const localSearch = localStorage.getItem('search') as string;
 
-  inputSearch = async (query?: string) => {
-    this.setState({ query });
-    const searchString = localStorage.getItem('search');
-    this.setState({ isLoading: false });
-    searchString
-      ? await PokemonApi.getByName(searchString.toLowerCase())
-          .then((data) => {
-            const newArr: IPost[] = [];
-            newArr.push(data);
-            this.setState({ newData: newArr });
+  const inputSearch = async (searchQuery: string | null) => {
+    setIsLoading(false);
+    searchQuery
+      ? await PokemonApi.getByName(searchQuery.toLowerCase())
+          .then((res: IPost) => {
+            setNewData([res]);
           })
-          .catch(() => this.setState({ newData: [] }))
-      : this.setState({ newData: this.state.data });
-    this.setState({ isLoading: true });
+          .catch(() => setNewData([]))
+      : PokemonApi.getALL().then((data: IPost[]) => {
+          setNewData(data);
+        });
+    setIsLoading(true);
   };
 
-  componentDidMount() {
-    this.setState({ isLoading: false });
-    PokemonApi.getALL().then((data: IPost[]) => {
-      this.setState({ data });
-      if (localStorage.getItem('search')) {
-        this.inputSearch();
-      } else {
-        this.setState({ newData: data });
-      }
-      this.setState({ isLoading: true });
-    });
-  }
+  useEffect(() => {
+    setIsLoading(false);
+    inputSearch(localSearch);
+  }, [localSearch]);
 
-  errorClick = () => {
-    this.setState({ isError: true });
+  const errorClick = () => {
+    setIsError(true);
   };
 
-  render() {
-    const { newData, isLoading, isError } = this.state;
-    if (isError) {
-      throw new Error('Test error');
-    }
-    return (
-      <div className="app">
-        <button className="error-btn" onClick={this.errorClick}>
-          Generate Error
-        </button>
-        <Search title="Write something" inputSearch={this.inputSearch} />
-        {isLoading ? (
-          <PostList posts={newData} title="You List" />
-        ) : (
-          <Loading />
-        )}
-      </div>
-    );
+  if (isError) {
+    throw new Error('Test error');
   }
-}
+  return (
+    <div className="app">
+      <button className="error-btn" onClick={errorClick}>
+        Generate Error
+      </button>
+      <Search title="Write something" inputSearch={inputSearch} />
+      {isLoading ? <PostList posts={newData} title="You List" /> : <Loading />}
+    </div>
+  );
+};
 
 export default App;
