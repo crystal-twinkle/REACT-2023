@@ -2,8 +2,9 @@
     "root": true,
     "extends": [
         "plugin:react/recommended",
-        "plugin:@typescript-eslint/recommended-type-checked",
-        "prettier"
+        "plugin:@typescript-eslint/recommended",
+        "prettier",
+        "plugin:prettier/recommended"
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
@@ -19,9 +20,7 @@
         "jest": true,
         "node": true
     },
-    "plugins": [
-        "@typescript-eslint", "react", "react-hooks"
-    ],
+    "plugins": ["@typescript-eslint", "react", "react-hooks"],
     "rules": {
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",

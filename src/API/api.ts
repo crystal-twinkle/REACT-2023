@@ -11,7 +11,7 @@ export default class PokemonApi {
     const promises = response.data.results.map(async (e: PropsDefault) => {
       return await this.getByURL(e.url);
     });
-    const resolvedPromises = await Promise.all(promises);
+    const resolvedPromises = (await Promise.all(promises)) as IPost[];
     pokemonDates.push(...resolvedPromises);
     return pokemonDates;
   }

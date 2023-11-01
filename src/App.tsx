@@ -15,12 +15,12 @@ class App extends React.Component {
     isError: false,
   };
 
-  inputSearch = (query?: string) => {
+  inputSearch = async (query?: string) => {
     this.setState({ query });
     const searchString = localStorage.getItem('search');
     this.setState({ isLoading: false });
     searchString
-      ? PokemonApi.getByName(searchString.toLowerCase())
+      ? await PokemonApi.getByName(searchString.toLowerCase())
           .then((data) => {
             const newArr: IPost[] = [];
             newArr.push(data);
