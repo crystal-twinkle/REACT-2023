@@ -20,8 +20,10 @@
         "jest": true,
         "node": true
     },
-    "plugins": ["@typescript-eslint", "react", "react-hooks"],
+    "plugins": ["@typescript-eslint", "react", "react-hooks", "etc"],
     "rules": {
+        "etc/no-commented-out-code": "error",
+        "prefer-const": "error",
         "react-hooks/rules-of-hooks": "error",
         "react-hooks/exhaustive-deps": "warn",
         "comma-dangle": ["error", "only-multiline"],
@@ -32,6 +34,7 @@
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/explicit-module-boundary-types": "off",
         "@typescript-eslint/no-empty-function": "off",
+        "@typescript-eslint/no-unused-vars": ["error"],
         "@typescript-eslint/no-explicit-any": "error",
         "@typescript-eslint/no-var-requires": "off",
         "react/jsx-uses-react": "off",
