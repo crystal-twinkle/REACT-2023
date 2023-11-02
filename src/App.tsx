@@ -12,7 +12,7 @@ const App = () => {
   const [isError, setIsError] = useState(false);
   const localSearch = localStorage.getItem('search') as string;
 
-  const inputSearch = async (searchQuery: string | null) => {
+  const inputSearch = async (searchQuery: string) => {
     setIsLoading(false);
     searchQuery
       ? await PokemonApi.getByName(searchQuery.toLowerCase())
@@ -28,7 +28,7 @@ const App = () => {
 
   useEffect(() => {
     setIsLoading(false);
-    inputSearch(localSearch);
+    inputSearch(localSearch || '');
   }, [localSearch]);
 
   const errorClick = () => {
