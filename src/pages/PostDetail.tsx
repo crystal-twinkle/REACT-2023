@@ -29,7 +29,11 @@ const PostDetail = () => {
       <>
         <div className="post-detail" id="post-detail">
           <h4>Pokemon name is {pokemon.name}</h4>
-          <img src={pokemon.sprites.front_default} alt="front" />
+          <img
+            className={`img-detail`}
+            src={pokemon.sprites.front_default}
+            alt="front"
+          />
           <p>Height: {pokemon.height}</p>
           <p>Weight: {pokemon.weight}</p>
           <button className="btn-close" onClick={close}>

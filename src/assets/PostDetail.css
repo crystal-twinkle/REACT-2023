@@ -1,5 +1,5 @@
 .post-detail_wrap {
-  position: absolute;
+  position: fixed;
   flex-direction: column;
   display: flex;
   top: 0;
@@ -13,8 +13,8 @@
   height: 100%;
 }
 
-.active {
-  top: 0;
+.img-detail {
+  transform: scale(1.2);
 }
 
 .post-detail {
