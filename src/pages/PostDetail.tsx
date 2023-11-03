@@ -41,8 +41,11 @@ const PostDetail = () => {
   }
 
   return (
-    <div className="post-detail_wrap">
-      {isLoading ? description() : <Loading />}
+    <div>
+      <div onClick={close} className={`blackout blackout-show`}></div>
+      <div className="post-detail_wrap">
+        {isLoading ? description() : <Loading />}
+      </div>
     </div>
   );
 };
