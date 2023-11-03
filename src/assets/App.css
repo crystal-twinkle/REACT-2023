@@ -1,7 +1,7 @@
 .app {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 2rem 2rem 0 2rem;
   width: 100vw;
   min-height: 100vh;
   opacity: 1;
@@ -19,9 +19,13 @@
   border: 1px solid teal;
 }
 
+button {
+  cursor: pointer;
+}
+
 .error-btn {
   position: absolute;
-  top: 7%;
+  top: 11%;
   right: 20%;
   background-color: rgba(255, 0, 38, 0.93);
   color: #fff;
@@ -34,6 +38,6 @@
 
 @media (max-width: 570px) {
   .error-btn {
-    top: 12%;
+    top: 16%;
   }
 }

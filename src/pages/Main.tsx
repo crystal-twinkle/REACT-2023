@@ -4,29 +4,28 @@ import PokemonApi from '../API/api';
 import Search from '../components/Search';
 import PostList from '../components/PostList';
 import Loading from '../components/Loading';
+import useFetch from '../components/useFetch';
 
 const Main = () => {
   const [newData, setNewData] = useState<IPost[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const localSearch = localStorage.getItem('search') as string;
+  const [fetchByName, isLoading, isFetchError] = useFetch(async (search) => {
+    if (search) {
+      const response = await PokemonApi.getByName(search);
+      setNewData([response]);
+    } else {
+      const response = await PokemonApi.getALL();
+      setNewData(response);
+    }
+  });
 
-  const inputSearch = async (searchQuery: string) => {
-    setIsLoading(false);
-    searchQuery
-      ? await PokemonApi.getByName(searchQuery.toLowerCase())
-          .then((res: IPost) => {
-            setNewData([res]);
-          })
-          .catch(() => setNewData([]))
-      : PokemonApi.getALL().then((data: IPost[]) => {
-          setNewData(data);
-        });
-    setIsLoading(true);
+  const inputSearch = (searchQuery: string) => {
+    isFetchError && setNewData([]);
+    fetchByName(searchQuery);
   };
 
   useEffect(() => {
-    setIsLoading(false);
     inputSearch(localSearch || '');
   }, [localSearch]);
 
