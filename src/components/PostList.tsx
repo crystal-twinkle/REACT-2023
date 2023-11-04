@@ -2,26 +2,22 @@ import React from 'react';
 import { IPost } from './models';
 import { Outlet, useNavigate } from 'react-router-dom';
 import '../assets/PostList.css';
-import Pagination from './Pagination';
 
 type PostListProps = {
   posts: IPost[];
   title: string;
-  changePage: (page: number) => void;
-  page: number;
-  totalPages: number;
+  isFetchError: boolean;
 };
 
-const PostList: React.FC<PostListProps> = ({
-  posts,
-  title,
-  page,
-  totalPages,
-  changePage,
-}) => {
+const PostList: React.FC<PostListProps> = ({ posts, title, isFetchError }) => {
   const navigate = useNavigate();
-  if (!posts.length) {
-    return <h3 style={{ textAlign: 'center' }}>No posts found!</h3>;
+
+  if (!posts.length || isFetchError) {
+    return (
+      <h3 style={{ textAlign: 'center', marginTop: '50px' }}>
+        No posts found!
+      </h3>
+    );
   }
 
   return (
@@ -50,7 +46,6 @@ const PostList: React.FC<PostListProps> = ({
         </div>
         <Outlet />
       </div>
-      <Pagination totalPages={totalPages} page={page} changePage={changePage} />
     </div>
   );
 };

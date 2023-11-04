@@ -5,25 +5,36 @@ import Search from '../components/Search';
 import PostList from '../components/PostList';
 import Loading from '../components/Loading';
 import useFetch from '../components/useFetch';
+import { useSearchParams } from 'react-router-dom';
+import Pagination from '../components/Pagination';
 
 const Main = () => {
   const [newData, setNewData] = useState<IPost[]>([]);
+  const [isSearch, setIsSearch] = useState(false);
   const [isError, setIsError] = useState(false);
-  const localSearch = localStorage.getItem('search') as string;
   const [totalPages, setTotalPages] = useState(0);
-  const [page, setPage] = useState(1);
-  const [fetch, isLoading, isFetchError] = useFetch(async (search: string) => {
-    if (search) {
-      const response = await PokemonApi.getByName(search);
-      setNewData([response]);
-    } else {
-      const { resolved, count } = await PokemonApi.getALL();
-      setTotalPages(Math.ceil(count / 20));
-      setNewData(resolved);
-    }
-  });
+  const [urlPageString, setUrlPageString] = useSearchParams();
+  const [page, setPage] = useState(urlPageString.get('page') || '1');
 
-  const changePage = (page: number) => {
+  const [fetch, isLoading, isFetchError] = useFetch(
+    async (search: string, page: string) => {
+      if (search) {
+        await setIsSearch(true);
+        const response = await PokemonApi.getByName(search);
+        setNewData([response]);
+      } else {
+        const countPosts = 20;
+        const offset = Number(page) * countPosts;
+        const { resolved, count } = await PokemonApi.getALL(offset);
+        setTotalPages(Math.ceil(count / 20));
+        setIsSearch(false);
+        setNewData(resolved);
+      }
+    }
+  );
+
+  const changePage = (page: string) => {
+    setUrlPageString({ page: page });
     setPage(page);
   };
 
@@ -32,9 +43,9 @@ const Main = () => {
   };
 
   useEffect(() => {
-    inputSearch(localSearch || '');
-    isFetchError && setNewData([]);
-  }, [localSearch, isFetchError]);
+    const localSearch = localStorage.getItem('search') as string;
+    fetch(localSearch || '', page);
+  }, [page]);
 
   const errorClick = () => {
     setIsError(true);
@@ -43,6 +54,7 @@ const Main = () => {
   if (isError) {
     throw new Error('Test error');
   }
+
   return (
     <div>
       <button className="error-btn" onClick={errorClick}>
@@ -50,13 +62,16 @@ const Main = () => {
       </button>
       <Search title="Write something" inputSearch={inputSearch} />
       {isLoading ? (
-        <PostList
-          page={page}
-          changePage={changePage}
-          totalPages={totalPages}
-          posts={newData}
-          title="You List"
-        />
+        <>
+          <PostList
+            posts={newData}
+            isFetchError={isFetchError}
+            title={!isSearch ? 'Generic List' : 'You List'}
+          />
+          {!isSearch && !isFetchError && (
+            <Pagination totalPages={totalPages} changePage={changePage} />
+          )}
+        </>
       ) : (
         <Loading />
       )}
