@@ -2,20 +2,30 @@ import React from 'react';
 import { IPost } from './models';
 import { Outlet, useNavigate } from 'react-router-dom';
 import '../assets/PostList.css';
+import Pagination from './Pagination';
 
 type PostListProps = {
   posts: IPost[];
   title: string;
+  changePage: (page: number) => void;
+  page: number;
+  totalPages: number;
 };
 
-const PostList: React.FC<PostListProps> = ({ posts, title }) => {
+const PostList: React.FC<PostListProps> = ({
+  posts,
+  title,
+  page,
+  totalPages,
+  changePage,
+}) => {
   const navigate = useNavigate();
   if (!posts.length) {
     return <h3 style={{ textAlign: 'center' }}>No posts found!</h3>;
   }
 
   return (
-    <div>
+    <div style={{ marginTop: '50px' }}>
       <h2 style={{ textAlign: 'center' }}>{title}</h2>
       <div className={`list-wrap`}>
         <div className="list">
@@ -40,6 +50,7 @@ const PostList: React.FC<PostListProps> = ({ posts, title }) => {
         </div>
         <Outlet />
       </div>
+      <Pagination totalPages={totalPages} page={page} changePage={changePage} />
     </div>
   );
 };

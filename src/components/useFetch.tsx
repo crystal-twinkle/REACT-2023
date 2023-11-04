@@ -10,6 +10,7 @@ const useFetch = (
     try {
       setIsLoading(false);
       await callback(arg);
+      setError(false);
     } catch (e) {
       setError(true);
     } finally {
