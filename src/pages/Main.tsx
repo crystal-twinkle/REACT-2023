@@ -25,10 +25,10 @@ const Main = () => {
         const response = await PokemonApi.getByName(search);
         setNewData([response]);
       } else {
-        const offset = Number(page) * Number(limit);
+        const offset = 1 + limit * (Number(page) - 1);
         const { resolved, countPosts } = await PokemonApi.getALL(limit, offset);
         setTotalCountPosts(countPosts);
-        const countPages = Math.ceil(countPosts / limit);
+        const countPages = Math.ceil((countPosts - 1) / limit);
         setTotalPages(countPages);
         setIsSearch(false);
         setNewData(resolved);
