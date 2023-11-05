@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import '../assets/Pagination.css';
 
 interface IPaginationProps {
   totalPages: number;
@@ -6,6 +7,7 @@ interface IPaginationProps {
   totalCountPosts: number;
   setCountPosts: (limit: number) => void;
   limit: number;
+  page: number;
 }
 
 const Pagination = ({
@@ -14,23 +16,27 @@ const Pagination = ({
   totalCountPosts,
   setCountPosts,
   limit,
+  page,
 }: IPaginationProps) => {
   const [inputValueSetPosts, setInputValueSetPosts] = useState(20);
-
-  function getPagesArray() {
-    const result = [];
-    for (let i = 0; i < totalPages; i++) {
-      result.push(i + 1);
-    }
-    return result;
-  }
+  const [isMoveRight, setIsMoveRight] = useState(true);
+  const [isMoveLeft, setIsMoveLeft] = useState(false);
 
   useEffect(() => {
-    const setInputValue = (limit: number) => {
+    const setCurrentParameters = (limit: number) => {
       setInputValueSetPosts(limit);
+      if (page === 1) {
+        setIsMoveLeft(false);
+      } else {
+        setIsMoveRight(true);
+        setIsMoveLeft(true);
+      }
+      if (page === totalPages) {
+        setIsMoveRight(false);
+      }
     };
-    setInputValue(limit);
-  }, [limit]);
+    setCurrentParameters(limit);
+  }, [page, totalPages, limit]);
 
   const inputSetPosts = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value);
@@ -45,25 +51,51 @@ const Pagination = ({
     }
   };
 
+  const clickLeft = () => {
+    if (page !== 1) {
+      changePage(page - 1);
+    }
+  };
+
+  const clickRight = () => {
+    if (page !== totalPages) {
+      changePage(page + 1);
+    }
+  };
+
   return (
-    <>
-      <div className="pagination-wrap">
-        {getPagesArray().map((p) => (
-          <button onClick={() => changePage(p)} key={p}>
-            {p}
-          </button>
-        ))}
+    <div className="pagination-wrap">
+      <div className="pagination-btn">
+        <button
+          disabled={!isMoveLeft}
+          className={`knob ${isMoveLeft ? 'active' : 'inactive'}`}
+          onClick={clickLeft}
+        >
+          <span>&lt;</span>
+        </button>
+        <button className="knob current-page active" id="current-page">
+          {page}
+        </button>
+        <button
+          disabled={!isMoveRight}
+          className={`knob ${isMoveRight ? 'active' : 'inactive'}`}
+          onClick={clickRight}
+        >
+          <span>&gt;</span>
+        </button>
       </div>
-      <input
-        value={inputValueSetPosts}
-        type="number"
-        step="1"
-        min="1"
-        max={totalCountPosts}
-        onChange={inputSetPosts}
-      />
-      <button onClick={newSetPosts}>Set Posts</button>
-    </>
+      <div className={'set-posts'}>
+        <input
+          value={inputValueSetPosts}
+          type="number"
+          step="1"
+          min="1"
+          max={totalCountPosts}
+          onChange={inputSetPosts}
+        />
+        <button onClick={newSetPosts}>Set Posts</button>
+      </div>
+    </div>
   );
 };
 

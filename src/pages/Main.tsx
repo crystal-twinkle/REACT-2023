@@ -50,9 +50,13 @@ const Main = () => {
   );
 
   useEffect(() => {
-    const localSearch = localStorage.getItem('search') as string;
-    const currentPage = Number(urlPageString.get('page')) || 1;
-    fetch(localSearch || '', currentPage, limit);
+    const init = () => {
+      const localSearch = localStorage.getItem('search') as string;
+      const currentPage = Number(urlPageString.get('page')) || 1;
+      setPage(currentPage);
+      fetch(localSearch || '', currentPage, limit);
+    };
+    init();
   }, [urlPageString, fetch, page, limit]);
 
   const changePage = (page: number) => {
@@ -98,6 +102,7 @@ const Main = () => {
               totalCountPosts={totalCountPosts}
               setCountPosts={setCountPosts}
               limit={limit}
+              page={page}
             />
           )}
         </>

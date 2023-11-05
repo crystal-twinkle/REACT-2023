@@ -30,7 +30,7 @@ const PostList: React.FC<PostListProps> = ({
   }
 
   const navigateDetailPage = (post: IPost) => {
-    navigate(`/posts?page=${page}&name=${post.name}`);
+    navigate(`/posts/details/?page=${page}&name=${post.name}`);
   };
 
   return (
