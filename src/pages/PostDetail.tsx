@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import useFetch from '../components/useFetch';
 import PokemonApi from '../API/api';
 import Loading from '../components/Loading';
@@ -8,8 +8,10 @@ import { useNavigate } from 'react-router-dom';
 import '../assets/PostDetail.css';
 
 const PostDetail = () => {
+  const [searchParams] = useSearchParams();
+  const page = searchParams.get('page');
+  const name = searchParams.get('name');
   const navigate = useNavigate();
-  const params = useParams();
   const [pokemon, setPokemon] = useState<IPost>({} as IPost);
   const [fetch, isLoading] = useFetch(async (search) => {
     const response = await PokemonApi.getByName(search);
@@ -17,11 +19,13 @@ const PostDetail = () => {
   });
 
   useEffect(() => {
-    fetch(params.name as string);
-  }, [params.name]);
+    if (name) {
+      fetch(name);
+    }
+  }, [name]);
 
   function close() {
-    navigate('/posts');
+    navigate(`/posts?page=${page}`);
   }
 
   function description(): JSX.Element {
@@ -45,12 +49,16 @@ const PostDetail = () => {
   }
 
   return (
-    <div>
-      <div onClick={close} className={`blackout blackout-show`}></div>
-      <div className="post-detail_wrap">
-        {isLoading ? description() : <Loading />}
-      </div>
-    </div>
+    <>
+      {page && name && (
+        <div>
+          <div onClick={close} className={`blackout blackout-show`}></div>
+          <div className="post-detail_wrap">
+            {isLoading ? description() : <Loading />}
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 

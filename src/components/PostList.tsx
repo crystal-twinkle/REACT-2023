@@ -1,16 +1,25 @@
 import React from 'react';
 import { IPost } from './models';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import '../assets/PostList.css';
 
 type PostListProps = {
   posts: IPost[];
   title: string;
+  page: number;
   isFetchError: boolean;
 };
 
-const PostList: React.FC<PostListProps> = ({ posts, title, isFetchError }) => {
+const PostList: React.FC<PostListProps> = ({
+  posts,
+  title,
+  isFetchError,
+  page,
+}) => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  searchParams.set('page', '1');
+  searchParams.set('name', 'ivysaur');
 
   if (!posts.length || isFetchError) {
     return (
@@ -19,6 +28,10 @@ const PostList: React.FC<PostListProps> = ({ posts, title, isFetchError }) => {
       </h3>
     );
   }
+
+  const navigateDetailPage = (post: IPost) => {
+    navigate(`/posts?page=${page}&name=${post.name}`);
+  };
 
   return (
     <div style={{ marginTop: '50px' }}>
@@ -35,7 +48,7 @@ const PostList: React.FC<PostListProps> = ({ posts, title, isFetchError }) => {
                 <button
                   className={`btn-detail`}
                   onClick={() => {
-                    navigate(`/posts/${post.name}`);
+                    navigateDetailPage(post);
                   }}
                 >
                   Detail

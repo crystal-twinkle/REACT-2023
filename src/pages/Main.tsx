@@ -38,7 +38,8 @@ const Main = () => {
 
   useEffect(() => {
     const localSearch = localStorage.getItem('search') as string;
-    const currentPage = Number(urlPageString.get('page'));
+    const currentPage = Number(urlPageString.get('page')) || 1;
+    setUrlPageString({ page: String(currentPage) });
     fetch(localSearch || '', currentPage, limit);
   }, [page, limit]);
 
@@ -73,6 +74,7 @@ const Main = () => {
       {isLoading ? (
         <>
           <PostList
+            page={page}
             posts={newData}
             isFetchError={isFetchError}
             title={!isSearch ? 'Generic List' : 'You List'}
