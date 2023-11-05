@@ -14,38 +14,47 @@ const Main = () => {
   const [isError, setIsError] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
   const [urlPageString, setUrlPageString] = useSearchParams();
-  const [page, setPage] = useState(urlPageString.get('page') || '1');
+  const [page, setPage] = useState(1);
+  const [totalCountPosts, setTotalCountPosts] = useState(1);
+  const [limit, setLimit] = useState(20);
 
   const [fetch, isLoading, isFetchError] = useFetch(
-    async (search: string, page: string) => {
+    async (search: string, page: number, limit: number) => {
       if (search) {
         await setIsSearch(true);
         const response = await PokemonApi.getByName(search);
         setNewData([response]);
       } else {
-        const countPosts = 20;
-        const offset = Number(page) * countPosts;
-        const { resolved, count } = await PokemonApi.getALL(offset);
-        setTotalPages(Math.ceil(count / 20));
+        const offset = Number(page) * Number(limit);
+        const { resolved, countPosts } = await PokemonApi.getALL(limit, offset);
+        setTotalCountPosts(countPosts);
+        const countPages = Math.ceil(countPosts / limit);
+        setTotalPages(countPages);
         setIsSearch(false);
         setNewData(resolved);
       }
     }
   );
 
-  const changePage = (page: string) => {
-    setUrlPageString({ page: page });
+  useEffect(() => {
+    const localSearch = localStorage.getItem('search') as string;
+    const currentPage = Number(urlPageString.get('page'));
+    fetch(localSearch || '', currentPage, limit);
+  }, [page, limit]);
+
+  const changePage = (page: number) => {
+    setUrlPageString({ page: String(page) });
     setPage(page);
+  };
+
+  const setCountPosts = (num: number) => {
+    setLimit(num);
+    setUrlPageString({ page: '1' });
   };
 
   const inputSearch = (searchQuery: string) => {
     fetch(searchQuery);
   };
-
-  useEffect(() => {
-    const localSearch = localStorage.getItem('search') as string;
-    fetch(localSearch || '', page);
-  }, [page]);
 
   const errorClick = () => {
     setIsError(true);
@@ -68,8 +77,14 @@ const Main = () => {
             isFetchError={isFetchError}
             title={!isSearch ? 'Generic List' : 'You List'}
           />
-          {!isSearch && !isFetchError && (
-            <Pagination totalPages={totalPages} changePage={changePage} />
+          {!isSearch && (
+            <Pagination
+              totalPages={totalPages}
+              changePage={changePage}
+              totalCountPosts={totalCountPosts}
+              setCountPosts={setCountPosts}
+              limit={limit}
+            />
           )}
         </>
       ) : (
