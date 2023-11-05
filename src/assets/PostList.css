@@ -22,4 +22,12 @@
 }
 
 .btn-detail {
+  border: none;
+  padding: 5px;
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  border-radius: 14px;
+  background-color: #136891;
+  color: #e5dfdf;
 }

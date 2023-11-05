@@ -45,15 +45,15 @@ const PostList: React.FC<PostListProps> = ({
                 <img src={post.sprites.front_default} alt="front" />
                 <img src={post.sprites.back_default} alt="back" />
                 <img src={post.sprites.front_shiny} alt="shiny" />
-                <button
-                  className={`btn-detail`}
-                  onClick={() => {
-                    navigateDetailPage(post);
-                  }}
-                >
-                  Detail
-                </button>
               </div>
+              <button
+                className={`btn-detail`}
+                onClick={() => {
+                  navigateDetailPage(post);
+                }}
+              >
+                Details
+              </button>
             </div>
           ))}
         </div>
