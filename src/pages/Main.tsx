@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { IPost } from '../components/models';
 import PokemonApi from '../API/api';
 import Search from '../components/Search';
 import PostList from '../components/PostList';
 import Loading from '../components/Loading';
-import useFetch from '../components/useFetch';
 import { useSearchParams } from 'react-router-dom';
 import Pagination from '../components/Pagination';
 
@@ -17,31 +16,44 @@ const Main = () => {
   const [page, setPage] = useState(1);
   const [totalCountPosts, setTotalCountPosts] = useState(1);
   const [limit, setLimit] = useState(20);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFetchError, setError] = useState(false);
 
-  const [fetch, isLoading, isFetchError] = useFetch(
+  const fetch = useCallback(
     async (search: string, page: number, limit: number) => {
-      if (search) {
-        await setIsSearch(true);
-        const response = await PokemonApi.getByName(search);
-        setNewData([response]);
-      } else {
-        const offset = 1 + limit * (Number(page) - 1);
-        const { resolved, countPosts } = await PokemonApi.getALL(limit, offset);
-        setTotalCountPosts(countPosts);
-        const countPages = Math.ceil((countPosts - 1) / limit);
-        setTotalPages(countPages);
-        setIsSearch(false);
-        setNewData(resolved);
+      try {
+        await setIsLoading(false);
+        await setError(false);
+        if (search) {
+          await setIsSearch(true);
+          const response = await PokemonApi.getByName(search);
+          setNewData([response]);
+        } else {
+          const offset = 1 + limit * (Number(page) - 1);
+          const { resolved, countPosts } = await PokemonApi.getALL(
+            limit,
+            offset
+          );
+          setTotalCountPosts(countPosts);
+          const countPages = Math.ceil((countPosts - 1) / limit);
+          setTotalPages(countPages);
+          setIsSearch(false);
+          setNewData(resolved);
+        }
+      } catch (e) {
+        setError(true);
+      } finally {
+        setIsLoading(true);
       }
-    }
+    },
+    []
   );
 
   useEffect(() => {
     const localSearch = localStorage.getItem('search') as string;
     const currentPage = Number(urlPageString.get('page')) || 1;
-    setUrlPageString({ page: String(currentPage) });
     fetch(localSearch || '', currentPage, limit);
-  }, [page, limit]);
+  }, [urlPageString, fetch, page, limit]);
 
   const changePage = (page: number) => {
     setUrlPageString({ page: String(page) });
@@ -54,7 +66,7 @@ const Main = () => {
   };
 
   const inputSearch = (searchQuery: string) => {
-    fetch(searchQuery);
+    fetch(searchQuery, page, limit);
   };
 
   const errorClick = () => {

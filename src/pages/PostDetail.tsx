@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import useFetch from '../components/useFetch';
 import PokemonApi from '../API/api';
 import Loading from '../components/Loading';
 import { IPost } from '../components/models';
@@ -13,22 +12,28 @@ const PostDetail = () => {
   const name = searchParams.get('name');
   const navigate = useNavigate();
   const [pokemon, setPokemon] = useState<IPost>({} as IPost);
-  const [fetch, isLoading] = useFetch(async (search) => {
-    const response = await PokemonApi.getByName(search);
-    setPokemon(response);
-  });
+  const [isLoading, setIsLoading] = useState(false);
+  const fetch = useCallback(async (search: string) => {
+    try {
+      setIsLoading(false);
+      const response = await PokemonApi.getByName(search);
+      setPokemon(response);
+    } finally {
+      setIsLoading(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (name) {
       fetch(name);
     }
-  }, [name]);
+  }, [fetch, name]);
 
   function close() {
     navigate(`/posts?page=${page}`);
   }
 
-  function description(): JSX.Element {
+  function description() {
     return (
       <>
         <div className="post-detail" id="post-detail">
