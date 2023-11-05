@@ -13,11 +13,16 @@ const Main = () => {
   const [isError, setIsError] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
   const [urlPageString, setUrlPageString] = useSearchParams();
-  const [page, setPage] = useState(1);
+  const currentPage = Number(urlPageString.get('page')) || 1;
+  const [page, setPage] = useState(currentPage || 1);
   const [totalCountPosts, setTotalCountPosts] = useState(1);
   const [limit, setLimit] = useState(20);
   const [isLoading, setIsLoading] = useState(false);
   const [isFetchError, setError] = useState(false);
+
+  if (currentPage === 1) {
+    setUrlPageString({ page: '1' });
+  }
 
   const fetch = useCallback(
     async (search: string, page: number, limit: number) => {
@@ -52,12 +57,10 @@ const Main = () => {
   useEffect(() => {
     const init = () => {
       const localSearch = localStorage.getItem('search') as string;
-      const currentPage = Number(urlPageString.get('page')) || 1;
-      setPage(currentPage);
       fetch(localSearch || '', currentPage, limit);
     };
     init();
-  }, [urlPageString, fetch, page, limit]);
+  }, [fetch, currentPage, limit]);
 
   const changePage = (page: number) => {
     setUrlPageString({ page: String(page) });

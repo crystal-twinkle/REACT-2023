@@ -1,6 +1,6 @@
 import React from 'react';
 import { IPost } from './models';
-import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import '../assets/PostList.css';
 
 type PostListProps = {
@@ -17,9 +17,6 @@ const PostList: React.FC<PostListProps> = ({
   page,
 }) => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  searchParams.set('page', '1');
-  searchParams.set('name', 'ivysaur');
 
   if (!posts.length || isFetchError) {
     return (
