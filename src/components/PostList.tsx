@@ -1,6 +1,6 @@
 import React from 'react';
 import { IPost } from './models';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import '../assets/PostList.css';
 
 type PostListProps = {
@@ -33,28 +33,25 @@ const PostList: React.FC<PostListProps> = ({
   return (
     <div style={{ marginTop: '50px' }}>
       <h2 style={{ textAlign: 'center' }}>{title}</h2>
-      <div className={`list-wrap`}>
-        <div className="list">
-          {posts.map((post: IPost) => (
-            <div className="list__element" key={post.name}>
-              <p className="list__name"> {post.name}</p>
-              <div>
-                <img src={post.sprites.front_default} alt="front" />
-                <img src={post.sprites.back_default} alt="back" />
-                <img src={post.sprites.front_shiny} alt="shiny" />
-              </div>
-              <button
-                className={`btn-detail`}
-                onClick={() => {
-                  navigateDetailPage(post);
-                }}
-              >
-                Details
-              </button>
+      <div className="list">
+        {posts.map((post: IPost) => (
+          <div className="list__element" key={post.name}>
+            <p className="list__name"> {post.name}</p>
+            <div>
+              <img src={post.sprites.front_default} alt="front" />
+              <img src={post.sprites.back_default} alt="back" />
+              <img src={post.sprites.front_shiny} alt="shiny" />
             </div>
-          ))}
-        </div>
-        <Outlet />
+            <button
+              className={`btn-detail`}
+              onClick={() => {
+                navigateDetailPage(post);
+              }}
+            >
+              Details
+            </button>
+          </div>
+        ))}
       </div>
     </div>
   );

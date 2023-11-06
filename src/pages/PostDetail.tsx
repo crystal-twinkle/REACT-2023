@@ -35,31 +35,23 @@ const PostDetail = () => {
 
   function description() {
     return (
-      <>
-        <div className="post-detail" id="post-detail">
-          <h4>Pokemon name is {pokemon.name}</h4>
-          <img
-            className={`img-detail`}
-            src={pokemon.sprites.front_default}
-            alt="front"
-          />
-          <p>Height: {pokemon.height}</p>
-          <p>Weight: {pokemon.weight}</p>
-          <button className="btn-close" onClick={close}>
-            Close
-          </button>
-        </div>
-      </>
+      <div className="post-detail" id="post-detail">
+        <h4>Pokemon name is {pokemon.name}</h4>
+        <img src={pokemon.sprites.front_default} alt="front" />
+        <p>Height: {pokemon.height}</p>
+        <p>Weight: {pokemon.weight}</p>
+        <button className="btn-close" onClick={close}>
+          Close
+        </button>
+      </div>
     );
   }
 
   return (
     <>
-      <div>
-        <div onClick={close} className={`blackout blackout-show`}></div>
-        <div className="post-detail_wrap">
-          {isLoading ? description() : <Loading />}
-        </div>
+      <div className={`post-detail_wrap`}>
+        <div onClick={close} className={`blackout`}></div>
+        {isLoading ? description() : <Loading />}
       </div>
     </>
   );

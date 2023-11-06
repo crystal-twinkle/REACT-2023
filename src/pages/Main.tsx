@@ -4,7 +4,7 @@ import PokemonApi from '../API/api';
 import Search from '../components/Search';
 import PostList from '../components/PostList';
 import Loading from '../components/Loading';
-import { useSearchParams } from 'react-router-dom';
+import { Outlet, useSearchParams } from 'react-router-dom';
 import Pagination from '../components/Pagination';
 
 const Main = () => {
@@ -85,33 +85,38 @@ const Main = () => {
   }
 
   return (
-    <div>
-      <button className="error-btn" onClick={errorClick}>
-        Generate Error
-      </button>
-      <Search title="Write something" inputSearch={inputSearch} />
-      {isLoading ? (
-        <>
-          <PostList
-            page={page}
-            posts={newData}
-            isFetchError={isFetchError}
-            title={!isSearch ? 'Generic List' : 'You List'}
-          />
-          {!isSearch && (
-            <Pagination
-              totalPages={totalPages}
-              changePage={changePage}
-              totalCountPosts={totalCountPosts}
-              setCountPosts={setCountPosts}
-              limit={limit}
+    <div className={`main-wrap`}>
+      <div className={`main`}>
+        <div className={`header`}>
+          <Search title="Write something" inputSearch={inputSearch} />
+          <button className="error-btn" onClick={errorClick}>
+            Generate Error
+          </button>
+        </div>
+        {isLoading ? (
+          <>
+            <PostList
               page={page}
+              posts={newData}
+              isFetchError={isFetchError}
+              title={!isSearch ? 'Generic List' : 'You List'}
             />
-          )}
-        </>
-      ) : (
-        <Loading />
-      )}
+            {!isSearch && (
+              <Pagination
+                totalPages={totalPages}
+                changePage={changePage}
+                totalCountPosts={totalCountPosts}
+                setCountPosts={setCountPosts}
+                limit={limit}
+                page={page}
+              />
+            )}
+          </>
+        ) : (
+          <Loading />
+        )}
+      </div>
+      <Outlet />
     </div>
   );
 };
