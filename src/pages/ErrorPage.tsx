@@ -1,32 +1,23 @@
-import React, { Component } from 'react';
+import React from 'react';
 import '../assets/ErrorPage.css';
 
-interface Props {
+interface IErrorPageProps {
   isErrorChange: (arg: boolean) => void;
 }
 
-interface State {
-  hasError: boolean;
-}
-
-export default class ErrorPage extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props);
-    this.state = { hasError: false };
-  }
-
-  change = () => {
-    this.props.isErrorChange(this.state.hasError);
+const ErrorPage = ({ isErrorChange }: IErrorPageProps) => {
+  const change = () => {
+    isErrorChange(false);
   };
 
-  render() {
-    return (
-      <div className="error-wrap">
-        <div className="error__text">OOPS, something went wrong (((</div>
-        <button className="button-21" onClick={this.change}>
-          Reset
-        </button>
-      </div>
-    );
-  }
-}
+  return (
+    <div className="error-wrap">
+      <div className="error__text">OOPS, something went wrong (((</div>
+      <button className="button-21" onClick={change}>
+        Reset
+      </button>
+    </div>
+  );
+};
+
+export default ErrorPage;
