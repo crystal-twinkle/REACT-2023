@@ -8,7 +8,6 @@ import '../assets/PostDetail.css';
 
 const PostDetail = () => {
   const [searchParams] = useSearchParams();
-  const page = searchParams.get('page');
   const name = searchParams.get('name');
   const navigate = useNavigate();
   const [pokemon, setPokemon] = useState<IPost>({} as IPost);
@@ -30,12 +29,12 @@ const PostDetail = () => {
   }, [fetch, name]);
 
   function close() {
-    navigate(`/posts?page=${page}`);
+    navigate(-1);
   }
 
   function description() {
     return (
-      <div className="post-detail-wrap">
+      <div className="post-detail-subwrap">
         <div className="post-detail">
           <h4>Pokemon name is {pokemon.name}</h4>
           <img src={pokemon.sprites.front_default} alt="front" />
@@ -51,7 +50,7 @@ const PostDetail = () => {
 
   return (
     <>
-      <div className={`post-detail_wrap`}>
+      <div className={`post-detail-wrap`}>
         <div onClick={close} className={`blackout`}></div>
         {isLoading ? description() : <Loading />}
       </div>

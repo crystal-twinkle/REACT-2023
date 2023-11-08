@@ -60,7 +60,7 @@ const Main = () => {
       fetch(localSearch || '', currentPage, limit);
     };
     init();
-  }, [setUrlPageString, urlPageString, fetch, limit]);
+  }, [fetch, limit]);
 
   const changePage = (page: number) => {
     setUrlPageString({ page: String(page) });

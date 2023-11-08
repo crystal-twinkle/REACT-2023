@@ -1,4 +1,4 @@
-.post-detail_wrap {
+.post-detail-wrap {
   background: rgba(41, 41, 41);
   color: #e0dada;
   z-index: 5;
@@ -9,18 +9,22 @@
   margin-left: 15px;
 }
 
-.post-detail-wrap {
+.post-detail-subwrap {
   padding: 20px;
   width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 15px;
 }
 
 .post-detail {
   display: flex;
   flex-direction: column;
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 h4 {
