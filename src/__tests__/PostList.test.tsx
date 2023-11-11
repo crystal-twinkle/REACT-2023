@@ -47,13 +47,14 @@ describe('PostList component', () => {
       const nameElement = screen.getByText(post.name);
       expect(nameElement).toBeInTheDocument();
     });
+    expect(mockPosts).toHaveLength(2);
 
     const frontImages = screen.getAllByAltText('front');
-    expect(frontImages).toHaveLength(mockPosts.length);
+    expect(frontImages).toHaveLength(2);
     const backImages = screen.getAllByAltText('back');
-    expect(backImages).toHaveLength(mockPosts.length);
+    expect(backImages).toHaveLength(2);
     const shinyImages = screen.getAllByAltText('shiny');
-    expect(shinyImages).toHaveLength(mockPosts.length);
+    expect(shinyImages).toHaveLength(2);
   });
 
   it('renders PostList component without posts', () => {

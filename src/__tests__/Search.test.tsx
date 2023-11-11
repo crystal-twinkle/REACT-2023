@@ -26,4 +26,23 @@ describe('Search component', () => {
     fireEvent.click(searchButton);
     expect(inputSearchMock).toHaveBeenCalledWith('Search query');
   });
+
+  it('Clicking the Search button saves the entered value to the local storage', async () => {
+    render(<Search title="Search Title" inputSearch={() => {}} />);
+
+    const inputElement = screen.getByRole('textbox');
+    fireEvent.change(inputElement, { target: { value: 'test local save' } });
+
+    const localSave = localStorage.getItem('search');
+    expect(localSave).toBe('test local save');
+  });
+
+  it('Check that the component retrieves the value from the local storage upon mounting', async () => {
+    const ls = localStorage.getItem('search');
+    expect(ls).toBe('test local save');
+
+    render(<Search title="Search Title" inputSearch={() => {}} />);
+    const inputElement = screen.getByRole('textbox');
+    expect(inputElement).toHaveValue('test local save');
+  });
 });
