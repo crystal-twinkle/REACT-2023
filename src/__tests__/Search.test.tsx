@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Search from '../components/Search';
-import WrapperMock from './wrapper.test';
+import WrapperMock from './mockWrapper.test';
 
 const Wrapper = () => {
   return (

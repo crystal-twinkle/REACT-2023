@@ -3,7 +3,7 @@ import SearchProvider from '../contexts/app-context';
 import React, { PropsWithChildren } from 'react';
 import { render } from '@testing-library/react';
 
-const WrapperMock = ({ children }: PropsWithChildren) => {
+const MockWrapper = ({ children }: PropsWithChildren) => {
   return (
     <BrowserRouter>
       <SearchProvider>{children}</SearchProvider>
@@ -13,8 +13,8 @@ const WrapperMock = ({ children }: PropsWithChildren) => {
 
 describe('Check render Components', () => {
   it('renders', async () => {
-    render(<WrapperMock />);
+    render(<MockWrapper />);
   });
 });
 
-export default WrapperMock;
+export default MockWrapper;

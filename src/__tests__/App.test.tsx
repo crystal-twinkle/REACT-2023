@@ -5,7 +5,7 @@ import { act } from 'react-dom/test-utils';
 import { screen } from '@testing-library/react';
 import React from 'react';
 import { createMemoryHistory } from 'history';
-import WrapperMock from './wrapper.test';
+import WrapperMock from './mockWrapper.test';
 
 describe('Renders main page correctly', async () => {
   it('display App', async () => {

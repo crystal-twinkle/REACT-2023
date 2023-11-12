@@ -3,7 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Main from '../pages/Main';
 import PokemonApi from '../API/api';
 import { Mock, vi } from 'vitest';
-import WrapperMock from './wrapper.test';
+import MockWrapper from './mockWrapper.test';
 
 vi.mock('../API/api');
 const mockSetUrlPageString = vi.fn();
@@ -33,9 +33,9 @@ vi.mock('react-router-dom', async () => {
 
 const MainWrapper = () => {
   return (
-    <WrapperMock>
+    <MockWrapper>
       <Main />
-    </WrapperMock>
+    </MockWrapper>
   );
 };
 
