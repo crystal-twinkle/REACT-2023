@@ -4,29 +4,31 @@ import React, {
   useState,
   useMemo,
 } from 'react';
+import { IPost } from '../components/models';
 
 interface ISearchContext {
-  inputSearchValue: string;
-  setInputSearchValue: React.Dispatch<React.SetStateAction<string>>;
   searchValue: string;
   setSearchValue: React.Dispatch<React.SetStateAction<string>>;
+  posts: IPost[];
+  setPosts: React.Dispatch<React.SetStateAction<IPost[]>>;
 }
+
 export const AppContext = createContext<ISearchContext>(null!);
 
 const AppProvider = ({ children }: PropsWithChildren) => {
-  const [inputSearchValue, setInputSearchValue] = useState(
+  const [searchValue, setSearchValue] = useState(
     localStorage.getItem('search') || ''
   );
-  const [searchValue, setSearchValue] = useState('');
+  const [posts, setPosts] = useState<IPost[]>([]);
 
   const value = useMemo(
     () => ({
       searchValue,
       setSearchValue,
-      inputSearchValue,
-      setInputSearchValue,
+      posts,
+      setPosts,
     }),
-    [inputSearchValue, searchValue]
+    [searchValue, posts]
   );
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

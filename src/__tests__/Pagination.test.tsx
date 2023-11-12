@@ -14,13 +14,17 @@ const defaultProps = {
   limit: 20,
 };
 
+const PaginationWrap = ({ page }: { page: number }) => {
+  return <Pagination {...defaultProps} page={page} />;
+};
+
 describe('Pagination component', () => {
   it('renders correctly', () => {
-    render(<Pagination {...defaultProps} page={10} />);
+    render(<PaginationWrap page={10} />);
   });
 
   it('handles input changes and clicking Set Posts button', () => {
-    render(<Pagination {...defaultProps} page={10} />);
+    render(<PaginationWrap page={10} />);
 
     const inputElement = screen.getByRole('spinbutton');
     const setPostsButton = screen.getByText('Set Posts');
@@ -32,7 +36,7 @@ describe('Pagination component', () => {
 
   it('handles clicking the left and right buttons', () => {
     const page = 10;
-    render(<Pagination {...defaultProps} page={page} />);
+    render(<PaginationWrap page={page} />);
 
     const leftButton = screen.getByText('<');
     const rightButton = screen.getByText('>');
@@ -43,10 +47,10 @@ describe('Pagination component', () => {
   });
 
   it('check canMoveLeft', () => {
-    render(<Pagination {...defaultProps} page={1} />);
+    render(<PaginationWrap page={1} />);
   });
 
   it('check canMoveRight', () => {
-    render(<Pagination {...defaultProps} page={65} />);
+    render(<PaginationWrap page={65} />);
   });
 });

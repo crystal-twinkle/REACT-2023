@@ -1,9 +1,11 @@
-import React, { FormEvent, useContext } from 'react';
+import React, { FormEvent, useContext, useState } from 'react';
 import { AppContext } from '../contexts/app-context';
 
 const Search = () => {
-  const { inputSearchValue, setInputSearchValue, setSearchValue } =
-    useContext(AppContext);
+  const [inputSearchValue, setInputSearchValue] = useState(
+    localStorage.getItem('search') || ''
+  );
+  const { setSearchValue } = useContext(AppContext);
 
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
@@ -12,9 +14,7 @@ const Search = () => {
   };
 
   const searchClick = () => {
-    if (inputSearchValue != null) {
-      setSearchValue(inputSearchValue);
-    }
+    setSearchValue(inputSearchValue);
   };
 
   return (

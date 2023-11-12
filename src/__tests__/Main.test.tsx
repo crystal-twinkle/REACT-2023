@@ -75,11 +75,9 @@ describe('Main Component', () => {
     fireEvent.click(setPostsButton);
     expect(mockSearchParam).toContain({ page: '1' });
     expect(mockSetUrlPageString).toHaveBeenCalledWith({ page: '1' });
-    vi.clearAllMocks();
   });
 
   it('handles search input', async () => {
-    vi.clearAllMocks();
     (PokemonApi.getByName as Mock).mockResolvedValue({
       name: 'ivysaur',
       sprites: { front_default: 'ivysaur-image-url' },

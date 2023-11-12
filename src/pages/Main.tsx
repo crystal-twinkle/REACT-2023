@@ -1,11 +1,11 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { IPost } from '../components/models';
 import PokemonApi from '../API/api';
 import Search from '../components/Search';
 import PostList from '../components/PostList';
 import Loading from '../components/Loading';
 import { Outlet, useSearchParams } from 'react-router-dom';
 import Pagination from '../components/Pagination';
+import { IPost } from '../components/models';
 import { AppContext } from '../contexts/app-context';
 
 const Main = () => {
@@ -59,10 +59,10 @@ const Main = () => {
         setUrlPageString({ page: '1' });
       }
       setPage(currentPage);
-      fetch(localSearch || '', currentPage, limit);
+      fetch(localSearch, currentPage, limit);
     };
     init();
-  }, [searchValue, fetch, limit]);
+  }, [searchValue, fetch, limit, page]);
 
   const changePage = (page: number) => {
     setUrlPageString({ page: String(page) });

@@ -4,6 +4,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import PostList from '../components/PostList';
 import { vi } from 'vitest';
+import { IPost } from '../components/models';
 
 const mockPosts = [
   {
@@ -30,13 +31,17 @@ const mockProps = {
   isFetchError: false,
 };
 
+const PostListWrap = ({ posts }: { posts: IPost[] }) => {
+  return (
+    <MemoryRouter>
+      <PostList {...mockProps} posts={posts} />
+    </MemoryRouter>
+  );
+};
+
 describe('PostList component', () => {
   it('renders PostList component with posts', () => {
-    render(
-      <MemoryRouter>
-        <PostList {...mockProps} posts={mockPosts} />
-      </MemoryRouter>
-    );
+    render(<PostListWrap posts={mockPosts} />);
 
     const titleElement = screen.getByText(mockProps.title);
     expect(titleElement).toBeInTheDocument();
@@ -58,11 +63,7 @@ describe('PostList component', () => {
   });
 
   it('renders PostList component without posts', () => {
-    render(
-      <MemoryRouter>
-        <PostList {...mockProps} posts={[]} />
-      </MemoryRouter>
-    );
+    render(<PostListWrap posts={[]} />);
     screen.getByText('No posts found!');
   });
 });
@@ -75,11 +76,7 @@ beforeEach(() => {
 
 describe('check click Details button ', async () => {
   it('navigates to detail page when "Details" button is clicked', async () => {
-    render(
-      <MemoryRouter>
-        <PostList {...mockProps} posts={mockPosts} />
-      </MemoryRouter>
-    );
+    render(<PostListWrap posts={mockPosts} />);
 
     const firstDetailButton = screen.getAllByText('Details')[0];
     fireEvent.click(firstDetailButton);
