@@ -6,14 +6,14 @@ import React, {
 } from 'react';
 import { IPost } from '../components/models';
 
-interface ISearchContext {
+export interface IAppContext {
   searchValue: string;
   setSearchValue: React.Dispatch<React.SetStateAction<string>>;
   posts: IPost[];
   setPosts: React.Dispatch<React.SetStateAction<IPost[]>>;
 }
 
-export const AppContext = createContext<ISearchContext>(null!);
+export const AppContext = createContext<IAppContext>(null!);
 
 const AppProvider = ({ children }: PropsWithChildren) => {
   const [searchValue, setSearchValue] = useState(

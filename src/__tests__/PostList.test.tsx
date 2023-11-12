@@ -5,6 +5,7 @@ import { MemoryRouter } from 'react-router-dom';
 import PostList from '../components/PostList';
 import { vi } from 'vitest';
 import { IPost } from '../components/models';
+import AppProvider, { AppContext, IAppContext } from '../contexts/app-context';
 
 const mockPosts = [
   {
@@ -34,7 +35,11 @@ const mockProps = {
 const PostListWrap = ({ posts }: { posts: IPost[] }) => {
   return (
     <MemoryRouter>
-      <PostList {...mockProps} posts={posts} />
+      <AppProvider>
+        <AppContext.Provider value={{ posts } as IAppContext}>
+          <PostList {...mockProps} />
+        </AppContext.Provider>
+      </AppProvider>
     </MemoryRouter>
   );
 };

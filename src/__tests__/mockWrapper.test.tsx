@@ -1,13 +1,13 @@
-import { BrowserRouter } from 'react-router-dom';
-import SearchProvider from '../contexts/app-context';
+import { MemoryRouter } from 'react-router-dom';
 import React, { PropsWithChildren } from 'react';
 import { render } from '@testing-library/react';
+import AppProvider from '../contexts/app-context';
 
 const MockWrapper = ({ children }: PropsWithChildren) => {
   return (
-    <BrowserRouter>
-      <SearchProvider>{children}</SearchProvider>
-    </BrowserRouter>
+    <MemoryRouter>
+      <AppProvider>{children}</AppProvider>
+    </MemoryRouter>
   );
 };
 

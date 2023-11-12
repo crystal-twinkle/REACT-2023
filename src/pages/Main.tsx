@@ -5,12 +5,10 @@ import PostList from '../components/PostList';
 import Loading from '../components/Loading';
 import { Outlet, useSearchParams } from 'react-router-dom';
 import Pagination from '../components/Pagination';
-import { IPost } from '../components/models';
 import { AppContext } from '../contexts/app-context';
 
 const Main = () => {
-  const { searchValue } = useContext(AppContext);
-  const [newData, setNewData] = useState<IPost[]>([]);
+  const { searchValue, setPosts } = useContext(AppContext);
   const [isSearch, setIsSearch] = useState(false);
   const [isError, setIsError] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
@@ -29,7 +27,7 @@ const Main = () => {
         if (search) {
           await setIsSearch(true);
           const response = await PokemonApi.getByName(search);
-          setNewData([response]);
+          setPosts([response]);
         } else {
           const offset = 1 + limit * (Number(page) - 1);
           const { resolved, countPosts } = await PokemonApi.getALL(
@@ -40,7 +38,7 @@ const Main = () => {
           const countPages = Math.ceil((countPosts - 1) / limit);
           setTotalPages(countPages);
           setIsSearch(false);
-          setNewData(resolved);
+          setPosts(resolved);
         }
       } catch (e) {
         setError(true);
@@ -95,7 +93,6 @@ const Main = () => {
           <>
             <PostList
               page={page}
-              posts={newData}
               isFetchError={isFetchError}
               title={!isSearch ? 'Generic List' : 'You List'}
             />
