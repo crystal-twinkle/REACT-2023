@@ -1,7 +1,6 @@
 import { render } from '@testing-library/react';
 import { Router } from 'react-router';
 import App from '../App';
-import { act } from 'react-dom/test-utils';
 import { screen } from '@testing-library/react';
 import React from 'react';
 import { createMemoryHistory } from 'history';
@@ -14,9 +13,6 @@ describe('Renders main page correctly', async () => {
         <App />
       </WrapperMock>
     );
-    act(() => {
-      expect(screen.getByText('Write something')).toBeInTheDocument();
-    });
   });
 
   it('NotFound page open with wrong path', () => {

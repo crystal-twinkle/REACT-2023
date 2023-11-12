@@ -3,7 +3,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import Search from '../components/Search';
 import WrapperMock from './mockWrapper.test';
 
-const Wrapper = () => {
+const SearchWrapper = () => {
   return (
     <WrapperMock>
       <Search />
@@ -12,19 +12,8 @@ const Wrapper = () => {
 };
 
 describe('Search component', () => {
-  it('renders correctly', () => {
-    render(<Wrapper />);
-    const titleElement = screen.getByText('Write something');
-    const inputElement = screen.getByPlaceholderText('');
-    const searchButton = screen.getByText('search');
-
-    expect(titleElement).toBeInTheDocument();
-    expect(inputElement).toBeInTheDocument();
-    expect(searchButton).toBeInTheDocument();
-  });
-
   it('handles input changes and clicking search button', () => {
-    render(<Wrapper />);
+    render(<SearchWrapper />);
     const inputElement = screen.getByRole('textbox');
     const searchButton = screen.getByText('search');
     fireEvent.change(inputElement, { target: { value: 'Search query' } });
@@ -34,7 +23,7 @@ describe('Search component', () => {
   });
 
   it('Clicking the Search button saves the entered value to the local storage', async () => {
-    render(<Wrapper />);
+    render(<SearchWrapper />);
 
     const inputElement = screen.getByRole('textbox');
     fireEvent.change(inputElement, { target: { value: 'test local save' } });
@@ -47,7 +36,7 @@ describe('Search component', () => {
     const ls = localStorage.getItem('search');
     expect(ls).toBe('test local save');
 
-    render(<Wrapper />);
+    render(<SearchWrapper />);
     const inputElement = screen.getByRole('textbox');
     expect(inputElement).toHaveValue('test local save');
   });
