@@ -1,18 +1,18 @@
 import { render } from '@testing-library/react';
-import { BrowserRouter } from 'react-router-dom';
 import { Router } from 'react-router';
 import App from '../App';
 import { act } from 'react-dom/test-utils';
 import { screen } from '@testing-library/react';
 import React from 'react';
 import { createMemoryHistory } from 'history';
+import WrapperMock from './wrapper.test';
 
 describe('Renders main page correctly', async () => {
   it('display App', async () => {
     render(
-      <BrowserRouter>
+      <WrapperMock>
         <App />
-      </BrowserRouter>
+      </WrapperMock>
     );
     act(() => {
       expect(screen.getByText('Write something')).toBeInTheDocument();

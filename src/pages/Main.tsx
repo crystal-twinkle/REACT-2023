@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { IPost } from '../components/models';
 import PokemonApi from '../API/api';
 import Search from '../components/Search';
@@ -6,8 +6,10 @@ import PostList from '../components/PostList';
 import Loading from '../components/Loading';
 import { Outlet, useSearchParams } from 'react-router-dom';
 import Pagination from '../components/Pagination';
+import { AppContext } from '../contexts/app-context';
 
 const Main = () => {
+  const { searchValue } = useContext(AppContext);
   const [newData, setNewData] = useState<IPost[]>([]);
   const [isSearch, setIsSearch] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -60,7 +62,7 @@ const Main = () => {
       fetch(localSearch || '', currentPage, limit);
     };
     init();
-  }, [fetch, limit]);
+  }, [searchValue, fetch, limit]);
 
   const changePage = (page: number) => {
     setUrlPageString({ page: String(page) });
@@ -70,10 +72,6 @@ const Main = () => {
   const setCountPosts = (num: number) => {
     setLimit(num);
     setUrlPageString({ page: '1' });
-  };
-
-  const inputSearch = (searchQuery: string) => {
-    fetch(searchQuery, page, limit);
   };
 
   const errorClick = () => {
@@ -88,7 +86,7 @@ const Main = () => {
     <div className={`main-wrap`}>
       <div className={`main`}>
         <div className={`header`}>
-          <Search title="Write something" inputSearch={inputSearch} />
+          <Search />
           <button className="error-btn" onClick={errorClick}>
             Generate Error
           </button>

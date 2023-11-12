@@ -38,7 +38,6 @@ describe('Pagination component', () => {
     const rightButton = screen.getByText('>');
     fireEvent.click(leftButton);
     expect(mockChangePage).toHaveBeenCalledWith(page - 1);
-    mockChangePage.mockClear();
     fireEvent.click(rightButton);
     expect(mockChangePage).toHaveBeenCalledWith(page + 1);
   });

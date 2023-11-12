@@ -1,27 +1,19 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useContext } from 'react';
+import { AppContext } from '../contexts/app-context';
 
-interface SearchProps {
-  title: string;
-  inputSearch: (arg: string) => void;
-}
-
-const Search: React.FC<SearchProps> = ({ title, inputSearch }) => {
-  const localSearch = localStorage.getItem('search');
-  const [inputValue, setInputValue] = useState(localSearch || '');
-
-  useEffect(() => {
-    localSearch && setInputValue(localSearch);
-  }, [localSearch]);
+const Search = () => {
+  const { inputSearchValue, setInputSearchValue, setSearchValue } =
+    useContext(AppContext);
 
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
     localStorage.setItem('search', query);
-    setInputValue(query);
+    setInputSearchValue(query);
   };
 
   const searchClick = () => {
-    if (inputValue != null) {
-      inputSearch(inputValue);
+    if (inputSearchValue != null) {
+      setSearchValue(inputSearchValue);
     }
   };
 
@@ -30,13 +22,15 @@ const Search: React.FC<SearchProps> = ({ title, inputSearch }) => {
       className="search-form"
       onSubmit={(event: FormEvent) => event.preventDefault()}
     >
-      <span style={{ textAlign: 'center', fontWeight: 'bold' }}> {title}</span>
+      <span style={{ textAlign: 'center', fontWeight: 'bold' }}>
+        Write something
+      </span>
       <input
         className="input"
         type="text"
         placeholder=""
         onChange={inputHandler}
-        value={inputValue || ''}
+        value={inputSearchValue}
       />
       <button type="submit" className="search-btn" onClick={searchClick}>
         search
