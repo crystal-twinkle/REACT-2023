@@ -49,10 +49,10 @@ const Main = () => {
     []
   );
 
+  const currentPage = Number(urlPageString.get('page')) || 1;
   useEffect(() => {
     const init = () => {
       const localSearch = localStorage.getItem('search') as string;
-      const currentPage = Number(urlPageString.get('page')) || 1;
       if (currentPage === 1) {
         setUrlPageString({ page: '1' });
       }
@@ -60,7 +60,7 @@ const Main = () => {
       fetch(localSearch, currentPage, limit);
     };
     init();
-  }, [searchValue, fetch, limit, page]);
+  }, [searchValue, fetch, limit, currentPage]);
 
   const changePage = (page: number) => {
     setUrlPageString({ page: String(page) });
