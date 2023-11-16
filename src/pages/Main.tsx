@@ -1,14 +1,16 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import PokemonApi from '../API/api';
 import Search from '../components/Search';
 import PostList from '../components/PostList';
 import Loading from '../components/Loading';
 import { Outlet, useSearchParams } from 'react-router-dom';
 import Pagination from '../components/Pagination';
-import { AppContext } from '../contexts/app-context';
+import { IPost } from '../components/models';
+import { useAppSelector } from '../store/redux-hooks';
 
 const Main = () => {
-  const { searchValue, setPosts } = useContext(AppContext);
+  const { query } = useAppSelector((state) => state.search);
+  const [newData, setNewData] = useState<IPost[]>([]);
   const [isSearch, setIsSearch] = useState(false);
   const [isError, setIsError] = useState(false);
   const [totalPages, setTotalPages] = useState(0);
@@ -27,7 +29,7 @@ const Main = () => {
         if (search) {
           await setIsSearch(true);
           const response = await PokemonApi.getByName(search);
-          setPosts([response]);
+          setNewData([response]);
         } else {
           const offset = 1 + limit * (Number(page) - 1);
           const { resolved, countPosts } = await PokemonApi.getALL(
@@ -38,7 +40,7 @@ const Main = () => {
           const countPages = Math.ceil((countPosts - 1) / limit);
           setTotalPages(countPages);
           setIsSearch(false);
-          setPosts(resolved);
+          setNewData(resolved);
         }
       } catch (e) {
         setError(true);
@@ -52,15 +54,15 @@ const Main = () => {
   const currentPage = Number(urlPageString.get('page')) || 1;
   useEffect(() => {
     const init = () => {
-      const localSearch = localStorage.getItem('search') as string;
       if (currentPage === 1) {
         setUrlPageString({ page: '1' });
       }
       setPage(currentPage);
-      fetch(localSearch, currentPage, limit);
+      fetch(query, currentPage, limit);
     };
     init();
-  }, [searchValue, fetch, limit, currentPage]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [query, fetch, limit, currentPage]);
 
   const changePage = (page: number) => {
     setUrlPageString({ page: String(page) });
@@ -94,6 +96,7 @@ const Main = () => {
             <PostList
               page={page}
               isFetchError={isFetchError}
+              posts={newData}
               title={!isSearch ? 'Generic List' : 'You List'}
             />
             {!isSearch && (

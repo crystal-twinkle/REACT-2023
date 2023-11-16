@@ -4,15 +4,16 @@ import App from './App';
 import ReactDOM from 'react-dom/client';
 import ErrorBoundary from './components/ErrorBoundary';
 import { BrowserRouter } from 'react-router-dom';
-import AppProvider from './contexts/app-context';
+import { Provider } from 'react-redux';
+import store from './store';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
       <ErrorBoundary>
-        <AppProvider>
+        <Provider store={store}>
           <App />
-        </AppProvider>
+        </Provider>
       </ErrorBoundary>
     </BrowserRouter>
   </React.StrictMode>

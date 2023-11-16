@@ -1,18 +1,22 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { IPost } from './models';
 import { useNavigate } from 'react-router-dom';
 import '../assets/PostList.css';
-import { AppContext } from '../contexts/app-context';
 
 type PostListProps = {
+  posts: IPost[];
   title: string;
   page: number;
   isFetchError: boolean;
 };
 
-const PostList: React.FC<PostListProps> = ({ title, isFetchError, page }) => {
+const PostList: React.FC<PostListProps> = ({
+  posts,
+  title,
+  isFetchError,
+  page,
+}) => {
   const navigate = useNavigate();
-  const { posts } = useContext(AppContext);
 
   if (!posts.length || isFetchError) {
     return (

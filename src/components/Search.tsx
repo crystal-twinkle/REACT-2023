@@ -1,11 +1,18 @@
-import React, { FormEvent, useContext, useState } from 'react';
-import { AppContext } from '../contexts/app-context';
+import React, { FormEvent, useEffect, useState } from 'react';
+import { useActions, useAppSelector } from '../store/redux-hooks';
 
 const Search = () => {
-  const [inputSearchValue, setInputSearchValue] = useState(
-    localStorage.getItem('search') || ''
-  );
-  const { setSearchValue } = useContext(AppContext);
+  const [inputSearchValue, setInputSearchValue] = useState('');
+  const { updateSearchQuery } = useActions();
+  const { query } = useAppSelector((state) => state.search);
+
+  useEffect(() => {
+    const init = () => {
+      setInputSearchValue(query);
+    };
+    init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
@@ -14,7 +21,7 @@ const Search = () => {
   };
 
   const searchClick = () => {
-    setSearchValue(inputSearchValue);
+    updateSearchQuery(inputSearchValue);
   };
 
   return (
