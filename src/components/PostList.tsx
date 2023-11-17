@@ -2,21 +2,26 @@ import React from 'react';
 import { IPost } from './models';
 import { useNavigate } from 'react-router-dom';
 import '../assets/PostList.css';
+import { useAppSelector } from '../store/redux-hooks';
 
 type PostListProps = {
   dataInfo: {
     count: number;
     results: IPost[];
   };
-  title: string;
   page: number;
-  isFetchError: boolean;
 };
 
-const PostList: React.FC<PostListProps> = (props: PostListProps) => {
+const PostList = (props: PostListProps) => {
+  const { dataInfo, page } = props;
   const navigate = useNavigate();
-  const { dataInfo, title, isFetchError, page } = props;
-  if (!dataInfo.results.length || isFetchError) {
+  const { query } = useAppSelector((state) => state.search);
+
+  const filteredPosts = dataInfo.results.filter((post: IPost) => {
+    return query ? post.name.toLowerCase().includes(query.toLowerCase()) : true;
+  });
+
+  if (!filteredPosts.length) {
     return (
       <h3 style={{ textAlign: 'center', marginTop: '50px' }}>
         No posts found!
@@ -30,9 +35,9 @@ const PostList: React.FC<PostListProps> = (props: PostListProps) => {
 
   return (
     <div style={{ marginTop: '50px' }}>
-      <h2 style={{ textAlign: 'center' }}>{title}</h2>
+      <h2 style={{ textAlign: 'center' }}>List</h2>
       <div className="list">
-        {dataInfo.results.map((post: IPost) => (
+        {filteredPosts.map((post: IPost) => (
           <div className="list__element" key={post.name}>
             <p className="list__name"> {post.name}</p>
             <button

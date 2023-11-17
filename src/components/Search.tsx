@@ -3,7 +3,7 @@ import { useActions, useAppSelector } from '../store/redux-hooks';
 
 const Search = () => {
   const [inputSearchValue, setInputSearchValue] = useState('');
-  const { updateSearchQuery } = useActions();
+  const { updateSearchQuery, setSearchState } = useActions();
   const { query } = useAppSelector((state) => state.search);
 
   useEffect(() => {
@@ -22,6 +22,7 @@ const Search = () => {
 
   const searchClick = () => {
     updateSearchQuery(inputSearchValue);
+    setSearchState(!query);
   };
 
   return (

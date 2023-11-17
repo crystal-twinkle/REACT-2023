@@ -2,7 +2,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { IPost } from '../components/models';
 
 interface IGetAllCardsParams {
-  search: string;
   limit: number;
   offset: number;
 }

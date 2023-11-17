@@ -2,10 +2,12 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface appState {
   query: string;
+  isSearch: boolean;
 }
 
 const initialState: appState = {
   query: localStorage.getItem('search') || '',
+  isSearch: !!localStorage.getItem('search'),
 };
 
 export const searchSlice = createSlice({
@@ -14,6 +16,9 @@ export const searchSlice = createSlice({
   reducers: {
     updateSearchQuery(state, action: PayloadAction<string>) {
       state.query = action.payload;
+    },
+    setSearchState(state, action: PayloadAction<boolean>) {
+      state.isSearch = action.payload;
     },
   },
 });
