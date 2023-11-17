@@ -1,7 +1,7 @@
 import { bindActionCreators } from '@reduxjs/toolkit';
 import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux';
 import { searchActions } from './reducers/searchSlice';
-import { RootState } from './index';
+import { RootState } from './store';
 
 const actions = {
   ...searchActions,

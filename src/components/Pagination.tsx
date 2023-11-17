@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import '../assets/Pagination.css';
 
 interface IPaginationProps {
-  totalPages: number;
   changePage: (newPage: number) => void;
   totalCountPosts: number;
   setCountPosts: (limit: number) => void;
@@ -10,20 +9,17 @@ interface IPaginationProps {
   page: number;
 }
 
-const Pagination = ({
-  totalPages,
-  changePage,
-  totalCountPosts,
-  setCountPosts,
-  limit,
-  page,
-}: IPaginationProps) => {
+const Pagination = (props: IPaginationProps) => {
+  const { changePage, totalCountPosts, setCountPosts, limit, page } = props;
   const [inputValueSetPosts, setInputValueSetPosts] = useState(20);
   const [isMoveRight, setIsMoveRight] = useState(true);
   const [isMoveLeft, setIsMoveLeft] = useState(false);
+  const [totalPages, setTotalPages] = useState(2);
 
   useEffect(() => {
-    const setCurrentParameters = (limit: number) => {
+    const setCurrentParameters = () => {
+      const countTotalPages = Math.ceil((totalCountPosts - 1) / limit);
+      setTotalPages(countTotalPages);
       setInputValueSetPosts(limit);
       if (page === 1) {
         setIsMoveLeft(false);
@@ -35,8 +31,8 @@ const Pagination = ({
         setIsMoveRight(false);
       }
     };
-    setCurrentParameters(limit);
-  }, [page, totalPages, limit]);
+    setCurrentParameters();
+  }, [page, limit, totalCountPosts, totalPages]);
 
   const inputSetPosts = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value);

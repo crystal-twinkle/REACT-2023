@@ -1,72 +1,39 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import PokemonApi from '../API/api';
+import React, { useEffect, useState } from 'react';
 import Search from '../components/Search';
 import PostList from '../components/PostList';
 import Loading from '../components/Loading';
 import { Outlet, useSearchParams } from 'react-router-dom';
 import Pagination from '../components/Pagination';
-import { IPost } from '../components/models';
 import { useAppSelector } from '../store/redux-hooks';
+import { useGetAllCardsQuery } from '../services/pokemonAPI';
 
 const Main = () => {
   const { query } = useAppSelector((state) => state.search);
-  const [newData, setNewData] = useState<IPost[]>([]);
-  const [isSearch, setIsSearch] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [totalPages, setTotalPages] = useState(0);
+  const [isMyError, setIsMyError] = useState(false);
   const [urlPageString, setUrlPageString] = useSearchParams();
-  const [page, setPage] = useState(1);
-  const [totalCountPosts, setTotalCountPosts] = useState(1);
   const [limit, setLimit] = useState(20);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isFetchError, setError] = useState(false);
-
-  const fetch = useCallback(
-    async (search: string, page: number, limit: number) => {
-      try {
-        await setIsLoading(false);
-        await setError(false);
-        if (search) {
-          await setIsSearch(true);
-          const response = await PokemonApi.getByName(search);
-          setNewData([response]);
-        } else {
-          const offset = 1 + limit * (Number(page) - 1);
-          const { resolved, countPosts } = await PokemonApi.getALL(
-            limit,
-            offset
-          );
-          setTotalCountPosts(countPosts);
-          const countPages = Math.ceil((countPosts - 1) / limit);
-          setTotalPages(countPages);
-          setIsSearch(false);
-          setNewData(resolved);
-        }
-      } catch (e) {
-        setError(true);
-      } finally {
-        setIsLoading(true);
-      }
-    },
-    []
-  );
 
   const currentPage = Number(urlPageString.get('page')) || 1;
+  const offset = 1 + limit * (currentPage - 1);
+  const { data, isLoading, refetch, isError } = useGetAllCardsQuery({
+    search: query,
+    limit,
+    offset,
+  });
+
   useEffect(() => {
-    const init = () => {
+    const init = async () => {
       if (currentPage === 1) {
         setUrlPageString({ page: '1' });
       }
-      setPage(currentPage);
-      fetch(query, currentPage, limit);
+      await refetch();
     };
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [query, fetch, limit, currentPage]);
+  }, [query, refetch, currentPage]);
 
   const changePage = (page: number) => {
     setUrlPageString({ page: String(page) });
-    setPage(page);
   };
 
   const setCountPosts = (num: number) => {
@@ -75,10 +42,10 @@ const Main = () => {
   };
 
   const errorClick = () => {
-    setIsError(true);
+    setIsMyError(true);
   };
 
-  if (isError) {
+  if (isMyError) {
     throw new Error('Test error');
   }
 
@@ -91,24 +58,21 @@ const Main = () => {
             Generate Error
           </button>
         </div>
-        {isLoading ? (
+        {data && !isLoading ? (
           <>
             <PostList
-              page={page}
-              isFetchError={isFetchError}
-              posts={newData}
-              title={!isSearch ? 'Generic List' : 'You List'}
+              page={currentPage}
+              isFetchError={isError}
+              dataInfo={data}
+              title={'Generic List'}
             />
-            {!isSearch && (
-              <Pagination
-                totalPages={totalPages}
-                changePage={changePage}
-                totalCountPosts={totalCountPosts}
-                setCountPosts={setCountPosts}
-                limit={limit}
-                page={page}
-              />
-            )}
+            <Pagination
+              changePage={changePage}
+              totalCountPosts={data.count}
+              setCountPosts={setCountPosts}
+              limit={limit}
+              page={currentPage}
+            />
           </>
         ) : (
           <Loading />

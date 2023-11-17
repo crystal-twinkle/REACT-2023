@@ -4,21 +4,19 @@ import { useNavigate } from 'react-router-dom';
 import '../assets/PostList.css';
 
 type PostListProps = {
-  posts: IPost[];
+  dataInfo: {
+    count: number;
+    results: IPost[];
+  };
   title: string;
   page: number;
   isFetchError: boolean;
 };
 
-const PostList: React.FC<PostListProps> = ({
-  posts,
-  title,
-  isFetchError,
-  page,
-}) => {
+const PostList: React.FC<PostListProps> = (props: PostListProps) => {
   const navigate = useNavigate();
-
-  if (!posts.length || isFetchError) {
+  const { dataInfo, title, isFetchError, page } = props;
+  if (!dataInfo.results.length || isFetchError) {
     return (
       <h3 style={{ textAlign: 'center', marginTop: '50px' }}>
         No posts found!
@@ -34,14 +32,9 @@ const PostList: React.FC<PostListProps> = ({
     <div style={{ marginTop: '50px' }}>
       <h2 style={{ textAlign: 'center' }}>{title}</h2>
       <div className="list">
-        {posts.map((post: IPost) => (
+        {dataInfo.results.map((post: IPost) => (
           <div className="list__element" key={post.name}>
             <p className="list__name"> {post.name}</p>
-            <div>
-              <img src={post.sprites.front_default} alt="front" />
-              <img src={post.sprites.back_default} alt="back" />
-              <img src={post.sprites.front_shiny} alt="shiny" />
-            </div>
             <button
               className={`btn-detail`}
               onClick={() => {

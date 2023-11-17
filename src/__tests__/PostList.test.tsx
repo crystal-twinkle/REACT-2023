@@ -37,7 +37,13 @@ const PostListWrap = ({ posts }: { posts: IPost[] }) => {
     <MemoryRouter>
       <AppProvider>
         <AppContext.Provider value={{ posts } as IAppContext}>
-          <PostList {...mockProps} />
+          <PostList
+            dataInfo={{
+              count: 1200,
+              results: posts,
+            }}
+            {...mockProps}
+          />
         </AppContext.Provider>
       </AppProvider>
     </MemoryRouter>
