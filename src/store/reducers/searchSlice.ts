@@ -5,7 +5,7 @@ interface appState {
   isSearch: boolean;
 }
 
-const initialState: appState = {
+export const initialState: appState = {
   query: localStorage.getItem('search') || '',
   isSearch: !!localStorage.getItem('search'),
 };

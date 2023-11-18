@@ -7,12 +7,13 @@ const Search = () => {
   const { query } = useAppSelector((state) => state.search);
 
   useEffect(() => {
-    const init = () => {
-      setInputSearchValue(query);
-    };
-    init();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+    if (query) {
+      const init = () => {
+        setInputSearchValue(query);
+      };
+      init();
+    }
+  }, [query]);
 
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;

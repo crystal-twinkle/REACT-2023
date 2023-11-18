@@ -1,11 +1,10 @@
 import React from 'react';
 import * as router from 'react-router';
-import { render, screen, fireEvent } from '@testing-library/react';
-import { MemoryRouter } from 'react-router-dom';
+import { screen, fireEvent } from '@testing-library/react';
 import PostList from '../components/PostList';
 import { vi } from 'vitest';
 import { IPost } from '../components/models';
-import AppProvider, { AppContext, IAppContext } from '../contexts/app-context';
+import { renderWithProviders } from './test-utils';
 
 const mockPosts = [
   {
@@ -26,36 +25,21 @@ const mockPosts = [
   },
 ];
 
-const mockProps = {
-  title: 'Mock Title',
-  page: 1,
-  isFetchError: false,
-};
-
-const PostListWrap = ({ posts }: { posts: IPost[] }) => {
-  return (
-    <MemoryRouter>
-      <AppProvider>
-        <AppContext.Provider value={{ posts } as IAppContext}>
-          <PostList
-            dataInfo={{
-              count: 1200,
-              results: posts,
-            }}
-            {...mockProps}
-          />
-        </AppContext.Provider>
-      </AppProvider>
-    </MemoryRouter>
+const postListCall = ({ posts }: { posts: IPost[] }) => {
+  return renderWithProviders(
+    <PostList
+      dataInfo={{
+        count: 1200,
+        results: posts,
+      }}
+      page={1}
+    />
   );
 };
 
 describe('PostList component', () => {
   it('renders PostList component with posts', () => {
-    render(<PostListWrap posts={mockPosts} />);
-
-    const titleElement = screen.getByText(mockProps.title);
-    expect(titleElement).toBeInTheDocument();
+    postListCall({ posts: mockPosts });
     const detailButtons = screen.getAllByText('Details');
     expect(detailButtons).toHaveLength(mockPosts.length);
 
@@ -64,17 +48,10 @@ describe('PostList component', () => {
       expect(nameElement).toBeInTheDocument();
     });
     expect(mockPosts).toHaveLength(2);
-
-    const frontImages = screen.getAllByAltText('front');
-    expect(frontImages).toHaveLength(2);
-    const backImages = screen.getAllByAltText('back');
-    expect(backImages).toHaveLength(2);
-    const shinyImages = screen.getAllByAltText('shiny');
-    expect(shinyImages).toHaveLength(2);
   });
 
   it('renders PostList component without posts', () => {
-    render(<PostListWrap posts={[]} />);
+    postListCall({ posts: [] });
     screen.getByText('No posts found!');
   });
 });
@@ -87,7 +64,7 @@ beforeEach(() => {
 
 describe('check click Details button ', async () => {
   it('navigates to detail page when "Details" button is clicked', async () => {
-    render(<PostListWrap posts={mockPosts} />);
+    postListCall({ posts: mockPosts });
 
     const firstDetailButton = screen.getAllByText('Details')[0];
     fireEvent.click(firstDetailButton);

@@ -15,7 +15,7 @@ const Main = () => {
 
   const currentPage = Number(urlPageString.get('page')) || 1;
   const offset = 1 + limit * (Number(currentPage) - 1);
-  const { data, isLoading, refetch } = useGetAllCardsQuery({
+  const { data, isLoading } = useGetAllCardsQuery({
     limit,
     offset,
   });
@@ -25,11 +25,10 @@ const Main = () => {
       if (currentPage === 1) {
         setUrlPageString({ page: '1' });
       }
-      await refetch();
     };
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [refetch, currentPage]);
+  }, [data, currentPage]);
 
   const changePage = (page: number) => {
     setUrlPageString({ page: String(page) });

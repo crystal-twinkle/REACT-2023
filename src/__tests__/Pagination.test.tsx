@@ -1,31 +1,30 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import Pagination from '../components/Pagination';
 import { vi } from 'vitest';
+import { renderWithProviders } from './test-utils';
 
 const mockChangePage = vi.fn();
 const mockSetCountPosts = vi.fn();
 
 const defaultProps = {
-  totalPages: 65,
   changePage: mockChangePage,
   totalCountPosts: 1200,
   setCountPosts: mockSetCountPosts,
   limit: 20,
 };
 
-const PaginationWrap = ({ page }: { page: number }) => {
-  return <Pagination {...defaultProps} page={page} />;
+const paginationCall = (page: number) => {
+  return renderWithProviders(<Pagination {...defaultProps} page={page} />);
 };
 
 describe('Pagination component', () => {
-  it('renders correctly', () => {
-    render(<PaginationWrap page={10} />);
+  it('renders correctly and check not canMoveLeft', () => {
+    paginationCall(1);
   });
 
   it('handles input changes and clicking Set Posts button', () => {
-    render(<PaginationWrap page={10} />);
-
+    paginationCall(10);
     const inputElement = screen.getByRole('spinbutton');
     const setPostsButton = screen.getByText('Set Posts');
     fireEvent.change(inputElement, { target: { value: 30 } });
@@ -36,7 +35,7 @@ describe('Pagination component', () => {
 
   it('handles clicking the left and right buttons', () => {
     const page = 10;
-    render(<PaginationWrap page={page} />);
+    paginationCall(page);
 
     const leftButton = screen.getByText('<');
     const rightButton = screen.getByText('>');
@@ -46,11 +45,7 @@ describe('Pagination component', () => {
     expect(mockChangePage).toHaveBeenCalledWith(page + 1);
   });
 
-  it('check canMoveLeft', () => {
-    render(<PaginationWrap page={1} />);
-  });
-
-  it('check canMoveRight', () => {
-    render(<PaginationWrap page={65} />);
+  it('check not canMoveRight', () => {
+    paginationCall(65);
   });
 });

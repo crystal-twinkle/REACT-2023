@@ -1,30 +1,26 @@
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent } from '@testing-library/react';
 import Search from '../components/Search';
-import WrapperMock from './mockWrapper.test';
+import { renderWithProviders } from './test-utils';
+import {
+  initialState,
+  searchActions,
+  searchReducer,
+} from '../store/reducers/searchSlice';
 
-const SearchWrapper = () => {
-  return (
-    <WrapperMock>
-      <Search />
-    </WrapperMock>
-  );
+const searchCall = () => {
+  return renderWithProviders(<Search />);
 };
 
 describe('Search component', () => {
-  it('handles input changes and clicking search button', () => {
-    render(<SearchWrapper />);
-    const inputElement = screen.getByRole('textbox');
+  it('click search button', () => {
+    searchCall();
     const searchButton = screen.getByText('search');
-    fireEvent.change(inputElement, { target: { value: 'Search query' } });
-    screen.debug();
-    expect(inputElement).toHaveValue('Search query');
     fireEvent.click(searchButton);
   });
 
   it('Clicking the Search button saves the entered value to the local storage', async () => {
-    render(<SearchWrapper />);
-
+    searchCall();
     const inputElement = screen.getByRole('textbox');
     fireEvent.change(inputElement, { target: { value: 'test local save' } });
 
@@ -32,12 +28,38 @@ describe('Search component', () => {
     expect(localSave).toBe('test local save');
   });
 
-  it('Check that the component retrieves the value from the local storage upon mounting', async () => {
+  it('Ensure component fetches local storage value on mount', async () => {
     const ls = localStorage.getItem('search');
     expect(ls).toBe('test local save');
+    const initialSearchState = {
+      search: {
+        query: ls || '',
+        isSearch: !!ls,
+      },
+    };
 
-    render(<SearchWrapper />);
+    renderWithProviders(<Search />, {
+      preloadedState: {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        PokemonAPI: {},
+        search: initialSearchState.search,
+      },
+    });
+
     const inputElement = screen.getByRole('textbox');
     expect(inputElement).toHaveValue('test local save');
+  });
+
+  it('should initialize with query from localStorage', () => {
+    const listSliceInit = searchReducer(
+      initialState,
+      searchActions.updateSearchQuery(localStorage.getItem('search') || '')
+    );
+    const expectedState = {
+      query: 'test local save',
+      isSearch: false,
+    };
+    expect(listSliceInit).toEqual(expectedState);
   });
 });

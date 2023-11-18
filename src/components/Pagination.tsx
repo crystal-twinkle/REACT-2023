@@ -14,12 +14,11 @@ const Pagination = (props: IPaginationProps) => {
   const [inputValueSetPosts, setInputValueSetPosts] = useState(20);
   const [isMoveRight, setIsMoveRight] = useState(true);
   const [isMoveLeft, setIsMoveLeft] = useState(false);
-  const [totalPages, setTotalPages] = useState(2);
+
+  const countTotalPages = Math.ceil((totalCountPosts - 1) / limit);
 
   useEffect(() => {
     const setCurrentParameters = () => {
-      const countTotalPages = Math.ceil((totalCountPosts - 1) / limit);
-      setTotalPages(countTotalPages);
       setInputValueSetPosts(limit);
       if (page === 1) {
         setIsMoveLeft(false);
@@ -27,12 +26,12 @@ const Pagination = (props: IPaginationProps) => {
         setIsMoveRight(true);
         setIsMoveLeft(true);
       }
-      if (page === totalPages) {
+      if (page === countTotalPages) {
         setIsMoveRight(false);
       }
     };
     setCurrentParameters();
-  }, [page, limit, totalCountPosts, totalPages]);
+  }, [page, limit, countTotalPages]);
 
   const inputSetPosts = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value);
@@ -54,7 +53,7 @@ const Pagination = (props: IPaginationProps) => {
   };
 
   const clickRight = () => {
-    if (page !== totalPages) {
+    if (page !== countTotalPages) {
       changePage(page + 1);
     }
   };
@@ -69,7 +68,7 @@ const Pagination = (props: IPaginationProps) => {
         >
           <span>&lt;</span>
         </button>
-        <button className="knob current-page active" id="current-page">
+        <button className="knob current-page active" data-testid="current-page">
           {page}
         </button>
         <button

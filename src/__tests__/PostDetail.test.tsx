@@ -1,40 +1,44 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/react';
 import PostDetail from '../pages/PostDetail';
-import { MemoryRouter } from 'react-router-dom';
-import { vi } from 'vitest';
+import { renderWithProviders } from './test-utils';
+import { setupServer } from 'msw/node';
+import { http, HttpResponse } from 'msw';
+
+const server = setupServer(
+  http.get('https://pokeapi.co/api/v2/pokemon/:name', ({ params }) => {
+    const { name } = params;
+    return HttpResponse.json({
+      name,
+      sprites: {
+        front_default: 'front_default_url',
+        back_default: 'back_default_url',
+        front_shiny: 'front_shiny_url',
+      },
+      height: 10,
+      weight: 20,
+    });
+  })
+);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
+const detailCall = () => {
+  return renderWithProviders(<PostDetail />);
+};
 
 describe('PostDetail component', () => {
-  vi.mock('../API/api', async () => {
-    const actual = await vi.importActual('../API/api');
-    return {
-      actual,
-      default: {
-        getByName: vi.fn().mockResolvedValue({
-          name: 'Pikachu',
-          sprites: { front_default: 'pikachu-image-url' },
-          height: 10,
-          weight: 20,
-        }),
-      },
-    };
-  });
-
   it('renders correctly with loading state', () => {
-    render(
-      <MemoryRouter>
-        <PostDetail />
-      </MemoryRouter>
-    );
+    detailCall();
   });
 
   it('fetches and displays Pokemon details', async () => {
-    render(
-      <MemoryRouter initialEntries={[`/?name=Pikachu`]}>
-        <PostDetail />
-      </MemoryRouter>
-    );
-
+    detailCall();
+    await waitFor(() => {
+      expect(screen.queryByText('Loading...')).toBeNull();
+    });
     await waitFor(() => {
       screen.getByText(`Pokemon name is Pikachu`);
       screen.getByAltText('front');
@@ -45,15 +49,9 @@ describe('PostDetail component', () => {
   });
 
   it('handles the "Close" button click', async () => {
-    render(
-      <MemoryRouter initialEntries={[`/?name=Pikachu`]}>
-        <PostDetail />
-      </MemoryRouter>
-    );
-
+    detailCall();
     await waitFor(() => {
-      const loadingElement = screen.getByText(/Loading/i);
-      expect(loadingElement).toBeInTheDocument();
+      expect(screen.queryByText('Loading...')).toBeNull();
     });
 
     const closeButton = await screen.getByText('Close');
