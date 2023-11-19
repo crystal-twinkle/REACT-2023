@@ -1,12 +1,12 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IPost } from '../components/models';
+import { IPost, IDetailPost } from '../components/models';
 
 interface IGetAllCardsParams {
   limit: number;
   offset: number;
 }
 
-interface IPokemonsResponse {
+interface IPokemonResponse {
   count: number;
   results: IPost[];
 }
@@ -16,7 +16,7 @@ export const pokemonAPI = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/pokemon' }),
   endpoints: (builder) => {
     return {
-      getAllCards: builder.query<IPokemonsResponse, IGetAllCardsParams>({
+      getAllCards: builder.query<IPokemonResponse, IGetAllCardsParams>({
         query: ({ limit, offset }) => ({
           url: '',
           params: {
@@ -25,7 +25,7 @@ export const pokemonAPI = createApi({
           },
         }),
       }),
-      getDetailedCard: builder.query<IPost, string>({
+      getDetailedCard: builder.query<IDetailPost, string>({
         query: (name) => ({
           url: `/${name}`,
         }),

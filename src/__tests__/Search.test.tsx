@@ -1,7 +1,7 @@
 import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
 import Search from '../components/Search';
-import { renderWithProviders } from './test-utils';
+import { renderWithProviders, renderWithProviderSearch } from './test-utils';
 import {
   initialState,
   searchActions,
@@ -28,7 +28,7 @@ describe('Search component', () => {
     expect(localSave).toBe('test local save');
   });
 
-  it('Ensure component fetches local storage value on mount', async () => {
+  it('Should initialize with query from localStorage', async () => {
     const ls = localStorage.getItem('search');
     expect(ls).toBe('test local save');
     const initialSearchState = {
@@ -38,11 +38,8 @@ describe('Search component', () => {
       },
     };
 
-    renderWithProviders(<Search />, {
+    renderWithProviderSearch(<Search />, {
       preloadedState: {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        PokemonAPI: {},
         search: initialSearchState.search,
       },
     });
@@ -51,8 +48,8 @@ describe('Search component', () => {
     expect(inputElement).toHaveValue('test local save');
   });
 
-  it('should initialize with query from localStorage', () => {
-    const listSliceInit = searchReducer(
+  it('check searchSlice', () => {
+    const searchSliceInit = searchReducer(
       initialState,
       searchActions.updateSearchQuery(localStorage.getItem('search') || '')
     );
@@ -60,6 +57,6 @@ describe('Search component', () => {
       query: 'test local save',
       isSearch: false,
     };
-    expect(listSliceInit).toEqual(expectedState);
+    expect(searchSliceInit).toEqual(expectedState);
   });
 });

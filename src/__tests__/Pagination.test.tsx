@@ -9,7 +9,7 @@ const mockSetCountPosts = vi.fn();
 
 const defaultProps = {
   changePage: mockChangePage,
-  totalCountPosts: 1200,
+  totalCountPosts: 1201,
   setCountPosts: mockSetCountPosts,
   limit: 20,
 };
@@ -46,6 +46,6 @@ describe('Pagination component', () => {
   });
 
   it('check not canMoveRight', () => {
-    paginationCall(65);
+    paginationCall(60);
   });
 });

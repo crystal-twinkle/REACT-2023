@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface appState {
+interface ISearchState {
   query: string;
   isSearch: boolean;
 }
 
-export const initialState: appState = {
+export const initialState: ISearchState = {
   query: localStorage.getItem('search') || '',
   isSearch: !!localStorage.getItem('search'),
 };

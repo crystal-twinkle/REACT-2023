@@ -9,19 +9,9 @@ import { renderWithProviders } from './test-utils';
 const mockPosts = [
   {
     name: 'Post_1',
-    sprites: {
-      front_default: 'image1.png',
-      back_default: 'image1_back.png',
-      front_shiny: 'image1_shiny.png',
-    },
   },
   {
     name: 'Post_2',
-    sprites: {
-      front_default: 'image2.png',
-      back_default: 'image2_back.png',
-      front_shiny: 'image2_shiny.png',
-    },
   },
 ];
 

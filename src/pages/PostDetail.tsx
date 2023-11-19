@@ -4,14 +4,17 @@ import Loading from '../components/Loading';
 import { useNavigate } from 'react-router-dom';
 import '../assets/PostDetail.css';
 import { useGetDetailedCardQuery } from '../services/pokemonAPI';
+import { useActions } from '../store/redux-hooks';
 
 const PostDetail = () => {
   const [searchParams] = useSearchParams();
   const name = searchParams.get('name');
   const page = searchParams.get('page');
   const navigate = useNavigate();
+  const { updateLoadingDetail } = useActions();
   const { data, isLoading } = useGetDetailedCardQuery(name || '');
 
+  updateLoadingDetail(isLoading);
   function close() {
     navigate(`/posts?page=${page}`);
   }

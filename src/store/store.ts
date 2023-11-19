@@ -1,11 +1,13 @@
 import { PreloadedState, configureStore } from '@reduxjs/toolkit';
 import { searchReducer } from './reducers/searchSlice';
 import { pokemonAPI } from '../services/pokemonAPI';
+import { someReducer } from './reducers/someSlice';
 
 const store = configureStore({
   reducer: {
     [pokemonAPI.reducerPath]: pokemonAPI.reducer,
     search: searchReducer,
+    some: someReducer,
   },
   devTools: process.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) =>
