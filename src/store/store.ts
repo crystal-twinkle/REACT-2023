@@ -19,6 +19,7 @@ export function setupStore(preloadedState?: PreloadedState<RootState>) {
     reducer: {
       [pokemonAPI.reducerPath]: pokemonAPI.reducer,
       search: searchReducer,
+      some: someReducer,
     },
     preloadedState,
     middleware: (getDefaultMiddleware) =>

@@ -7,6 +7,13 @@ import { configureStore, PreloadedState } from '@reduxjs/toolkit';
 import type { RenderOptions } from '@testing-library/react';
 import { searchReducer } from '../store/reducers/searchSlice';
 
+const searchState = {
+  search: {
+    query: localStorage.getItem('search') || '',
+    isSearch: !!localStorage.getItem('search'),
+  },
+};
+
 const defaultState: PreloadedState<RootState> = {
   PokemonAPI: {
     queries: {},
@@ -24,10 +31,7 @@ const defaultState: PreloadedState<RootState> = {
       keepUnusedDataFor: 60,
     },
   },
-  search: {
-    query: localStorage.getItem('search') || '',
-    isSearch: !!localStorage.getItem('search'),
-  },
+  ...searchState,
   some: {
     posts: [],
     loadingAllCards: true,
@@ -61,25 +65,32 @@ export function renderWithProviders(
   return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
 }
 
+const searchSetupStore = (
+  preloadedState?: { search?: { query: string; isSearch: boolean } } | undefined
+) => {
+  return configureStore({
+    reducer: { search: searchReducer },
+    preloadedState,
+  });
+};
+
+interface ExtendedRenderOptionSome extends Omit<RenderOptions, 'queries'> {
+  preloadedState?: typeof searchState;
+  store?: ReturnType<typeof searchSetupStore>;
+}
+
 export function renderWithProviderSearch(
   ui: React.ReactElement,
   {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-ignore
-    preloadedState = {},
-    store = configureStore({
-      reducer: { search: searchReducer },
-      preloadedState,
-    }),
+    preloadedState = searchState,
+    store = searchSetupStore(preloadedState),
     ...renderOptions
-  } = {}
+  }: ExtendedRenderOptionSome = {}
 ) {
   function Wrapper({ children }: PropsWithChildren) {
     return (
       <Provider store={store}>
-        <MemoryRouter initialEntries={[`/?name=Pikachu`]}>
-          {children}
-        </MemoryRouter>
+        <MemoryRouter>{children}</MemoryRouter>
       </Provider>
     );
   }

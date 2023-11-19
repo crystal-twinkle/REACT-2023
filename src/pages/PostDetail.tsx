@@ -13,7 +13,6 @@ const PostDetail = () => {
   const navigate = useNavigate();
   const { updateLoadingDetail } = useActions();
   const { data, isLoading } = useGetDetailedCardQuery(name || '');
-
   updateLoadingDetail(isLoading);
   function close() {
     navigate(`/posts?page=${page}`);
