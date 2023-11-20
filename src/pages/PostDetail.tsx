@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import Loading from '../components/Loading';
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +13,15 @@ const PostDetail = () => {
   const navigate = useNavigate();
   const { updateLoadingDetail } = useActions();
   const { data, isLoading } = useGetDetailedCardQuery(name || '');
-  updateLoadingDetail(isLoading);
+
+  useEffect(() => {
+    const init = async () => {
+      updateLoadingDetail(isLoading);
+    };
+    init();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
+
   function close() {
     navigate(`/posts?page=${page}`);
   }
