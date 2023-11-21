@@ -4,30 +4,6 @@ import Main from '../pages/Main';
 import { vi } from 'vitest';
 import { renderWithProviders } from './test-utils';
 
-import { setupServer } from 'msw/node';
-import { http, HttpResponse } from 'msw';
-
-const server = setupServer(
-  http.get('https://pokeapi.co/api/v2/pokemon', ({}) => {
-    return HttpResponse.json({
-      count: 1200,
-      results: [
-        { name: 'Bulbasaur' },
-        { name: 'Charmander' },
-        { name: 'Pikachu' },
-        { name: 'ivysaur' },
-      ],
-    });
-  }),
-  http.get('https://pokeapi.co/api/v2/pokemon/bulbasaur', ({}) => {
-    return HttpResponse.json({ name: 'Bulbasaur' });
-  })
-);
-
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
-
 const mockSetUrlPageString = vi.fn();
 
 let mockSearchParam: { page: string } = { page: '1' };
