@@ -21,9 +21,6 @@ export const pokemonSlice = createSlice({
     updateItems(state, action: PayloadAction<IPost[]>) {
       state.posts = action.payload;
     },
-    updateLoading(state, action: PayloadAction<boolean>) {
-      state.loading = action.payload;
-    },
   },
   extraReducers: (builder) => {
     builder.addMatcher(

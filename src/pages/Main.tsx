@@ -8,8 +8,7 @@ import { useGetAllCardsQuery } from '../services/pokemonAPI';
 import { useActions, useAppSelector } from '../store/redux-hooks';
 
 const Main = () => {
-  const { query } = useAppSelector((state) => state.search);
-  const { posts } = useAppSelector((state) => state.pokemon);
+  const { query, isSearch } = useAppSelector((state) => state.search);
   const { updateItems } = useActions();
   const [isMyError, setIsMyError] = useState(false);
   const [urlPageString, setUrlPageString] = useSearchParams();
@@ -66,8 +65,8 @@ const Main = () => {
         </div>
         {!isLoading ? (
           <>
-            <PostList page={currentPage} posts={posts} />
-            {data?.count && !query && (
+            <PostList page={currentPage} />
+            {data && !isSearch && (
               <Pagination
                 changePage={changePage}
                 totalCountPosts={data.count}

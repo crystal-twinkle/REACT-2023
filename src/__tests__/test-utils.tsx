@@ -3,16 +3,15 @@ import React, { PropsWithChildren } from 'react';
 import { render } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { setupStore, RootState, AppStore } from '../store/store';
-import { configureStore, PreloadedState } from '@reduxjs/toolkit';
+import { PreloadedState } from '@reduxjs/toolkit';
 import type { RenderOptions } from '@testing-library/react';
-import { searchReducer } from '../store/reducers/searchSlice';
 
-const searchState = {
-  search: {
-    query: localStorage.getItem('search') || '',
-    isSearch: !!localStorage.getItem('search'),
-  },
-};
+export const mockPosts = [
+  { name: 'Bulbasaur' },
+  { name: 'Charmander' },
+  { name: 'Pikachu' },
+  { name: 'ivysaur' },
+];
 
 const defaultState: PreloadedState<RootState> = {
   PokemonAPI: {
@@ -31,7 +30,10 @@ const defaultState: PreloadedState<RootState> = {
       keepUnusedDataFor: 60,
     },
   },
-  ...searchState,
+  search: {
+    query: localStorage.getItem('search') || '',
+    isSearch: !!localStorage.getItem('search'),
+  },
   pokemon: {
     status: '',
     posts: [],
@@ -58,39 +60,6 @@ export function renderWithProviders(
         <MemoryRouter initialEntries={[`/?name=Pikachu`]}>
           {children}
         </MemoryRouter>
-      </Provider>
-    );
-  }
-
-  return { store, ...render(ui, { wrapper: Wrapper, ...renderOptions }) };
-}
-
-const searchSetupStore = (
-  preloadedState?: { search?: { query: string; isSearch: boolean } } | undefined
-) => {
-  return configureStore({
-    reducer: { search: searchReducer },
-    preloadedState,
-  });
-};
-
-interface ExtendedRenderOptionSome extends Omit<RenderOptions, 'queries'> {
-  preloadedState?: typeof searchState;
-  store?: ReturnType<typeof searchSetupStore>;
-}
-
-export function renderWithProviderSearch(
-  ui: React.ReactElement,
-  {
-    preloadedState = searchState,
-    store = searchSetupStore(preloadedState),
-    ...renderOptions
-  }: ExtendedRenderOptionSome = {}
-) {
-  function Wrapper({ children }: PropsWithChildren) {
-    return (
-      <Provider store={store}>
-        <MemoryRouter>{children}</MemoryRouter>
       </Provider>
     );
   }

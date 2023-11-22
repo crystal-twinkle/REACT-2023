@@ -1,19 +1,10 @@
-import React, { FormEvent, useEffect, useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { useActions, useAppSelector } from '../store/redux-hooks';
 
 const Search = () => {
-  const [inputSearchValue, setInputSearchValue] = useState('');
   const { updateSearchQuery, setSearchState } = useActions();
   const { query } = useAppSelector((state) => state.search);
-
-  useEffect(() => {
-    if (query) {
-      const init = () => {
-        setInputSearchValue(query);
-      };
-      init();
-    }
-  }, [query]);
+  const [inputSearchValue, setInputSearchValue] = useState(query);
 
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
@@ -23,7 +14,7 @@ const Search = () => {
 
   const searchClick = () => {
     updateSearchQuery(inputSearchValue);
-    setSearchState(!query);
+    setSearchState(!!inputSearchValue);
   };
 
   return (

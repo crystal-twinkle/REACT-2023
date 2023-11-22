@@ -3,25 +3,24 @@ import * as router from 'react-router';
 import { screen, fireEvent } from '@testing-library/react';
 import PostList from '../components/PostList';
 import { vi } from 'vitest';
+import { mockPosts, renderWithProviders } from './test-utils';
 import { IPost } from '../components/models';
-import { renderWithProviders } from './test-utils';
 
-const mockPosts = [
-  {
-    name: 'Post_1',
-  },
-  {
-    name: 'Post_2',
-  },
-];
-
-const postListCall = ({ posts }: { posts: IPost[] }) => {
-  return renderWithProviders(<PostList posts={posts} page={1} />);
+const postListCall = (posts: IPost[]) => {
+  renderWithProviders(<PostList page={1} />, {
+    preloadedState: {
+      pokemon: {
+        status: 'success',
+        posts: posts,
+        loading: false,
+      },
+    },
+  });
 };
 
 describe('PostList component', () => {
   it('renders PostList component with posts', () => {
-    postListCall({ posts: mockPosts });
+    postListCall(mockPosts);
     const detailButtons = screen.getAllByText('Details');
     expect(detailButtons).toHaveLength(mockPosts.length);
 
@@ -29,11 +28,10 @@ describe('PostList component', () => {
       const nameElement = screen.getByText(post.name);
       expect(nameElement).toBeInTheDocument();
     });
-    expect(mockPosts).toHaveLength(2);
   });
 
   it('renders PostList component without posts', () => {
-    postListCall({ posts: [] });
+    postListCall([]);
     screen.getByText('No posts found!');
   });
 });
@@ -46,10 +44,12 @@ beforeEach(() => {
 
 describe('check click Details button ', async () => {
   it('navigates to detail page when "Details" button is clicked', async () => {
-    postListCall({ posts: mockPosts });
+    postListCall(mockPosts);
 
     const firstDetailButton = screen.getAllByText('Details')[0];
     fireEvent.click(firstDetailButton);
-    expect(navigate).toHaveBeenCalledWith('/posts/details/?page=1&name=Post_1');
+    expect(navigate).toHaveBeenCalledWith(
+      '/posts/details/?page=1&name=Bulbasaur'
+    );
   });
 });

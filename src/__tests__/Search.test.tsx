@@ -1,7 +1,7 @@
 import React from 'react';
 import { screen, fireEvent } from '@testing-library/react';
 import Search from '../components/Search';
-import { renderWithProviders, renderWithProviderSearch } from './test-utils';
+import { renderWithProviders } from './test-utils';
 import {
   initialState,
   searchActions,
@@ -38,7 +38,7 @@ describe('Search component', () => {
       },
     };
 
-    renderWithProviderSearch(<Search />, {
+    renderWithProviders(<Search />, {
       preloadedState: {
         search: initialSearchState.search,
       },
@@ -54,8 +54,8 @@ describe('Search component', () => {
       searchActions.updateSearchQuery(localStorage.getItem('search') || '')
     );
     const expectedState = {
-      query: 'test local save',
       isSearch: false,
+      query: 'test local save',
     };
     expect(searchSliceInit).toEqual(expectedState);
   });

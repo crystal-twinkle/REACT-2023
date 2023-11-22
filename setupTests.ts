@@ -2,17 +2,13 @@ import '@testing-library/jest-dom';
 
 import { setupServer } from 'msw/node';
 import { http, HttpResponse } from 'msw';
+import { mockPosts } from './src/__tests__/test-utils';
 
 const server = setupServer(
   http.get('https://pokeapi.co/api/v2/pokemon', ({}) => {
     return HttpResponse.json({
       count: 1200,
-      results: [
-        { name: 'Bulbasaur' },
-        { name: 'Charmander' },
-        { name: 'Pikachu' },
-        { name: 'ivysaur' },
-      ],
+      results: mockPosts,
     });
   }),
   http.get('https://pokeapi.co/api/v2/pokemon/:name', ({ params }) => {

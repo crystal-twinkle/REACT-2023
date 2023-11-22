@@ -2,14 +2,15 @@ import React from 'react';
 import { IPost } from './models';
 import { useNavigate } from 'react-router-dom';
 import '../assets/PostList.css';
+import { useAppSelector } from '../store/redux-hooks';
 
 type PostListProps = {
-  posts: IPost[];
   page: number;
 };
 
 const PostList = (props: PostListProps) => {
-  const { posts, page } = props;
+  const { posts } = useAppSelector((state) => state.pokemon);
+  const { page } = props;
   const navigate = useNavigate();
 
   if (!posts?.length) {
