@@ -16,15 +16,7 @@ const mockPosts = [
 ];
 
 const postListCall = ({ posts }: { posts: IPost[] }) => {
-  return renderWithProviders(
-    <PostList
-      dataInfo={{
-        count: 1200,
-        results: posts,
-      }}
-      page={1}
-    />
-  );
+  return renderWithProviders(<PostList posts={posts} page={1} />);
 };
 
 describe('PostList component', () => {

@@ -4,11 +4,13 @@ import { IPost, IDetailPost } from '../components/models';
 interface IGetAllCardsParams {
   limit: number;
   offset: number;
+  query: string;
 }
 
 interface IPokemonResponse {
   count: number;
   results: IPost[];
+  name: string;
 }
 
 export const pokemonAPI = createApi({
@@ -17,8 +19,8 @@ export const pokemonAPI = createApi({
   endpoints: (builder) => {
     return {
       getAllCards: builder.query<IPokemonResponse, IGetAllCardsParams>({
-        query: ({ limit, offset }) => ({
-          url: '',
+        query: ({ limit, offset, query }) => ({
+          url: `/${query}`,
           params: {
             limit,
             offset,

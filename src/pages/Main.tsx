@@ -8,23 +8,28 @@ import { useGetAllCardsQuery } from '../services/pokemonAPI';
 import { useActions, useAppSelector } from '../store/redux-hooks';
 
 const Main = () => {
-  const { isSearch } = useAppSelector((state) => state.search);
-  const { updateItems, updateLoadingAll } = useActions();
+  const { query } = useAppSelector((state) => state.search);
+  const { posts } = useAppSelector((state) => state.pokemon);
+  const { updateItems } = useActions();
   const [isMyError, setIsMyError] = useState(false);
   const [urlPageString, setUrlPageString] = useSearchParams();
   const [limit, setLimit] = useState(20);
-
   const currentPage = Number(urlPageString.get('page')) || 1;
   const offset = 1 + limit * (Number(currentPage) - 1);
+
   const { data, isLoading } = useGetAllCardsQuery({
+    query,
     limit,
     offset,
   });
 
   useEffect(() => {
     const init = async () => {
-      data && updateItems(data.results);
-      updateLoadingAll(isLoading);
+      if (query) {
+        data && updateItems([data]);
+      } else {
+        data && updateItems(data.results);
+      }
       if (currentPage === 1) {
         setUrlPageString({ page: '1' });
       }
@@ -59,10 +64,10 @@ const Main = () => {
             Generate Error
           </button>
         </div>
-        {data && !isLoading ? (
+        {!isLoading ? (
           <>
-            <PostList page={currentPage} dataInfo={data} />
-            {!isSearch && (
+            <PostList page={currentPage} posts={posts} />
+            {data?.count && !query && (
               <Pagination
                 changePage={changePage}
                 totalCountPosts={data.count}

@@ -2,11 +2,11 @@ import { bindActionCreators } from '@reduxjs/toolkit';
 import { useDispatch, TypedUseSelectorHook, useSelector } from 'react-redux';
 import { searchActions } from './reducers/searchSlice';
 import { RootState } from './store';
-import { someActions } from './reducers/someSlice';
+import { pokemonActions } from './reducers/pokemonSlice';
 
 const actions = {
   ...searchActions,
-  ...someActions,
+  ...pokemonActions,
 };
 
 export const useActions = () => {

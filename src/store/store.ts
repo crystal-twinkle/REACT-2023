@@ -1,14 +1,20 @@
-import { PreloadedState, configureStore } from '@reduxjs/toolkit';
+import {
+  PreloadedState,
+  configureStore,
+  combineReducers,
+} from '@reduxjs/toolkit';
 import { searchReducer } from './reducers/searchSlice';
 import { pokemonAPI } from '../services/pokemonAPI';
-import { someReducer } from './reducers/someSlice';
+import { pokemonReducer } from './reducers/pokemonSlice';
+
+const rootReducer = combineReducers({
+  [pokemonAPI.reducerPath]: pokemonAPI.reducer,
+  search: searchReducer,
+  pokemon: pokemonReducer,
+});
 
 const store = configureStore({
-  reducer: {
-    [pokemonAPI.reducerPath]: pokemonAPI.reducer,
-    search: searchReducer,
-    some: someReducer,
-  },
+  reducer: rootReducer,
   devTools: process.env.NODE_ENV !== 'production',
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware().concat(pokemonAPI.middleware),
@@ -16,11 +22,7 @@ const store = configureStore({
 
 export function setupStore(preloadedState?: PreloadedState<RootState>) {
   return configureStore({
-    reducer: {
-      [pokemonAPI.reducerPath]: pokemonAPI.reducer,
-      search: searchReducer,
-      some: someReducer,
-    },
+    reducer: rootReducer,
     preloadedState,
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware({

@@ -32,10 +32,10 @@ const defaultState: PreloadedState<RootState> = {
     },
   },
   ...searchState,
-  some: {
+  pokemon: {
+    status: '',
     posts: [],
-    loadingAllCards: true,
-    loadingDetailedCard: true,
+    loading: true,
   },
 };
 
