@@ -6,10 +6,11 @@ import { vi } from 'vitest';
 import { mockPosts, renderWithProviders } from './test-utils';
 import { IPost } from '../components/models';
 
-const postListCall = (posts: IPost[]) => {
+const postListCall = (posts: IPost[], error?: boolean) => {
   renderWithProviders(<PostList page={1} />, {
     preloadedState: {
       pokemon: {
+        error: error ? error : false,
         status: 'success',
         posts: posts,
         loading: false,
@@ -31,7 +32,7 @@ describe('PostList component', () => {
   });
 
   it('renders PostList component without posts', () => {
-    postListCall([]);
+    postListCall([], true);
     screen.getByText('No posts found!');
   });
 });

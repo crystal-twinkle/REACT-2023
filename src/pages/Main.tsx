@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import Search from '../components/Search';
-import PostList from '../components/PostList';
-import Loading from '../components/Loading';
 import { Outlet, useSearchParams } from 'react-router-dom';
 import Pagination from '../components/Pagination';
 import { useGetAllCardsQuery } from '../services/pokemonAPI';
-import { useActions, useAppSelector } from '../store/redux-hooks';
+import { useAppSelector } from '../store/redux-hooks';
+import PostList from '../components/PostList';
 
 const Main = () => {
   const { query, isSearch } = useAppSelector((state) => state.search);
-  const { updateItems } = useActions();
   const [isMyError, setIsMyError] = useState(false);
   const [urlPageString, setUrlPageString] = useSearchParams();
   const [limit, setLimit] = useState(20);
   const currentPage = Number(urlPageString.get('page')) || 1;
   const offset = 1 + limit * (Number(currentPage) - 1);
 
-  const { data, isLoading, isError } = useGetAllCardsQuery({
+  const { data } = useGetAllCardsQuery({
     query,
     limit,
     offset,
@@ -24,11 +22,6 @@ const Main = () => {
 
   useEffect(() => {
     const init = async () => {
-      if (query) {
-        data && updateItems([data]);
-      } else {
-        data && updateItems(data.results);
-      }
       if (currentPage === 1) {
         setUrlPageString({ page: '1' });
       }
@@ -63,21 +56,15 @@ const Main = () => {
             Generate Error
           </button>
         </div>
-        {!isLoading ? (
-          <>
-            <PostList page={currentPage} isError={isError} />
-            {data && !isSearch && (
-              <Pagination
-                changePage={changePage}
-                totalCountPosts={data.count}
-                setCountPosts={setCountPosts}
-                limit={limit}
-                page={currentPage}
-              />
-            )}
-          </>
-        ) : (
-          <Loading />
+        <PostList page={currentPage} />
+        {data && !isSearch && (
+          <Pagination
+            changePage={changePage}
+            totalCountPosts={data.count}
+            setCountPosts={setCountPosts}
+            limit={limit}
+            page={currentPage}
+          />
         )}
       </div>
       <Outlet />

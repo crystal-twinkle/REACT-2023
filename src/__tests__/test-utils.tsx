@@ -35,9 +35,10 @@ const defaultState: PreloadedState<RootState> = {
     isSearch: !!localStorage.getItem('search'),
   },
   pokemon: {
+    error: false,
     status: '',
     posts: [],
-    loading: true,
+    loading: false,
   },
 };
 

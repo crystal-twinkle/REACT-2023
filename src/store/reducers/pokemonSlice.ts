@@ -1,10 +1,11 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { IPost } from '../../components/models';
 import { pokemonAPI } from '../../services/pokemonAPI';
 
 interface ISomeState {
   posts: IPost[];
   loading: boolean;
+  error: boolean;
   status: string;
 }
 
@@ -12,16 +13,13 @@ const initialState: ISomeState = {
   status: '',
   posts: [],
   loading: true,
+  error: false,
 };
 
 export const pokemonSlice = createSlice({
   name: 'different',
   initialState,
-  reducers: {
-    updateItems(state, action: PayloadAction<IPost[]>) {
-      state.posts = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addMatcher(
       pokemonAPI.endpoints.getAllCards.matchPending,
@@ -35,8 +33,13 @@ export const pokemonSlice = createSlice({
       pokemonAPI.endpoints.getAllCards.matchFulfilled,
       (state, action) => {
         state.status = 'success';
-        state.posts = action.payload.results;
+        if (action.payload?.results) {
+          state.posts = action.payload.results;
+        } else {
+          state.posts = [action.payload];
+        }
         state.loading = false;
+        state.error = false;
       }
     );
     builder.addMatcher(
@@ -45,6 +48,7 @@ export const pokemonSlice = createSlice({
         state.status = 'failed';
         state.posts = [];
         state.loading = false;
+        state.error = true;
       }
     );
   },
