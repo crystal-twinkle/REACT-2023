@@ -21,7 +21,7 @@ const PostDetail = () => {
       <div className="post-detail-subwrap">
         {data && (
           <div className="post-detail">
-            <h4>Pokemon name is {data.name}</h4>
+            <h4>{data.name}</h4>
             <div>
               <img src={data.sprites.front_default} alt="front" />
               <img src={data.sprites.back_default} alt="back" />
