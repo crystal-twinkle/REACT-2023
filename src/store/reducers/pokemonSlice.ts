@@ -27,6 +27,7 @@ export const pokemonSlice = createSlice({
       pokemonAPI.endpoints.getAllCards.matchPending,
       (state) => {
         state.status = 'loading';
+        state.posts = [];
         state.loading = true;
       }
     );

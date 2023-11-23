@@ -6,14 +6,15 @@ import { useAppSelector } from '../store/redux-hooks';
 
 type PostListProps = {
   page: number;
+  isError: boolean;
 };
 
 const PostList = (props: PostListProps) => {
   const { posts } = useAppSelector((state) => state.pokemon);
-  const { page } = props;
+  const { page, isError } = props;
   const navigate = useNavigate();
 
-  if (!posts?.length) {
+  if (!posts?.length || isError) {
     return (
       <h3 style={{ textAlign: 'center', marginTop: '50px' }}>
         No posts found!

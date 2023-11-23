@@ -16,7 +16,7 @@ const Main = () => {
   const currentPage = Number(urlPageString.get('page')) || 1;
   const offset = 1 + limit * (Number(currentPage) - 1);
 
-  const { data, isLoading } = useGetAllCardsQuery({
+  const { data, isLoading, isError } = useGetAllCardsQuery({
     query,
     limit,
     offset,
@@ -35,7 +35,7 @@ const Main = () => {
     };
     init();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data, currentPage]);
+  }, [data, currentPage, query]);
 
   const changePage = (page: number) => {
     setUrlPageString({ page: String(page) });
@@ -65,7 +65,7 @@ const Main = () => {
         </div>
         {!isLoading ? (
           <>
-            <PostList page={currentPage} />
+            <PostList page={currentPage} isError={isError} />
             {data && !isSearch && (
               <Pagination
                 changePage={changePage}
