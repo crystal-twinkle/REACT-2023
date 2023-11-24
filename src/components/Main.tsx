@@ -8,10 +8,10 @@ import PostList from './PostList';
 import PostDetail from './PostDetail';
 import Loading from './Loading';
 import styles from '../assets/Main.module.css';
+import ErrorBtn from './Error/ErrorBtn';
 
 const Main = () => {
   const { query, isSearch } = useAppSelector((state) => state.search);
-  const [isMyError, setIsMyError] = useState(false);
   const router = useRouter();
   const [limit, setLimit] = useState(20);
   const currentPage = Number(router.query.page) || 1;
@@ -54,22 +54,12 @@ const Main = () => {
     });
   };
 
-  const errorClick = () => {
-    setIsMyError(true);
-  };
-
-  if (isMyError) {
-    throw new Error('Test error');
-  }
-
   return (
     <div className={styles.wrap}>
       <div className={styles.main}>
         <div className={styles.header}>
           <Search />
-          <button className={styles.errorBtn} onClick={errorClick}>
-            Generate Error
-          </button>
+          <ErrorBtn />
         </div>
         {!isLoading ? (
           <>

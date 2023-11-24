@@ -1,14 +1,12 @@
 import React from 'react';
-import Main from '../components/Main';
 import store from '../store/store';
 import { Provider } from 'react-redux';
+import Main from '../components/Main';
 
 export default function Page() {
   return (
-    <div className="app">
-      <Provider store={store}>
-        <Main />
-      </Provider>
-    </div>
+    <Provider store={store}>
+      <Main />
+    </Provider>
   );
 }

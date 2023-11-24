@@ -7,7 +7,7 @@ import { mockPosts, renderWithProviders } from './test-utils';
 import { IPost } from '../components/models';
 
 const postListCall = (posts: IPost[], error?: boolean) => {
-  renderWithProviders(<PostList page={1} />, {
+  renderWithProviders(<PostList page={1} dataAll={[]} />, {
     preloadedState: {
       pokemon: {
         error: error ? error : false,

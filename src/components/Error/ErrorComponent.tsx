@@ -1,11 +1,11 @@
 import React from 'react';
-import styles from '../../assets/ErrorPage.module.css';
+import styles from '../../assets/Error.module.css';
 
 interface IErrorPageProps {
   isErrorChange: (arg: boolean) => void;
 }
 
-const ErrorPage = ({ isErrorChange }: IErrorPageProps) => {
+const ErrorComponent = ({ isErrorChange }: IErrorPageProps) => {
   const change = () => {
     isErrorChange(false);
   };
@@ -20,4 +20,4 @@ const ErrorPage = ({ isErrorChange }: IErrorPageProps) => {
   );
 };
 
-export default ErrorPage;
+export default ErrorComponent;

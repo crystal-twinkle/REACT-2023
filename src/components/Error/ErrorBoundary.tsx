@@ -1,5 +1,5 @@
 import React, { Component, ReactNode } from 'react';
-import ErrorPage from '../pages/error';
+import ErrorComponent from './ErrorComponent';
 
 export interface IErrorBoundaryProps {
   children: React.ReactNode;
@@ -28,7 +28,7 @@ export default class ErrorBoundary extends Component<
 
     if (hasError) {
       return (
-        <ErrorPage
+        <ErrorComponent
           isErrorChange={(hasError: boolean) => this.setState({ hasError })}
         />
       );
