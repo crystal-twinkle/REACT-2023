@@ -1,18 +1,27 @@
 import React from 'react';
 import { IPost } from './models';
-import { useNavigate } from 'react-router-dom';
-import '../assets/PostList.css';
+import styles from '../assets/PostList.module.css';
 import { useAppSelector } from '../store/redux-hooks';
 import Loading from './Loading';
+import { useRouter } from 'next/router';
 
 type PostListProps = {
   page: number;
+  dataAll: IPost[];
 };
 
 const PostList = (props: PostListProps) => {
+  const { query } = useAppSelector((state) => state.search);
   const { posts, loading, error } = useAppSelector((state) => state.pokemon);
-  const { page } = props;
-  const navigate = useNavigate();
+  const { dataAll } = props;
+  const router = useRouter();
+
+  let postsCurrent: IPost[];
+  if (query) {
+    postsCurrent = posts;
+  } else {
+    postsCurrent = dataAll;
+  }
 
   function notFound() {
     return (
@@ -26,12 +35,12 @@ const PostList = (props: PostListProps) => {
     return (
       <div style={{ marginTop: '50px' }}>
         <h2 style={{ textAlign: 'center' }}>List</h2>
-        <div className="list">
-          {posts.map((post: IPost) => (
-            <div className="list__element" key={post.name}>
-              <p className="list__name"> {post.name}</p>
+        <div className={styles.list}>
+          {postsCurrent.map((post: IPost) => (
+            <div className={styles.list__element} key={post.name}>
+              <p className={styles.list__name}> {post.name}</p>
               <button
-                className={`btn-detail`}
+                className={styles.btnDetail}
                 onClick={() => {
                   navigateDetailPage(post);
                 }}
@@ -46,7 +55,10 @@ const PostList = (props: PostListProps) => {
   }
 
   const navigateDetailPage = (post: IPost) => {
-    navigate(`/posts/details/?page=${page}&name=${post.name}`);
+    router.push({
+      pathname: router.pathname,
+      query: { ...router.query, id: `${post.name}` },
+    });
   };
 
   return <>{!loading ? !error ? mainBlock() : notFound() : <Loading />}</>;

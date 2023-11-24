@@ -23,7 +23,7 @@
   text-overflow: ellipsis;
 }
 
-.btn-detail {
+.btnDetail {
   align-self: center;
   position: relative;
   z-index: 6;

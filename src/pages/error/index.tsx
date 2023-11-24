@@ -1,5 +1,5 @@
 import React from 'react';
-import '../assets/ErrorPage.css';
+import styles from '../../assets/ErrorPage.module.css';
 
 interface IErrorPageProps {
   isErrorChange: (arg: boolean) => void;
@@ -11,9 +11,9 @@ const ErrorPage = ({ isErrorChange }: IErrorPageProps) => {
   };
 
   return (
-    <div className="error-wrap">
-      <div className="error__text">OOPS, something went wrong (((</div>
-      <button className="button-21" onClick={change}>
+    <div className={styles.errorWrap}>
+      <div className={styles.error__text}>OOPS, something went wrong (((</div>
+      <button className={styles.button21} onClick={change}>
         Reset
       </button>
     </div>

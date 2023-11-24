@@ -1,8 +1,9 @@
 {
-  "homepage": "https://github.com/crystal-twinkle/react-components",
+  "homepage": "https://github.com/crystal-twinkle/RSS-REACT-2023",
   "scripts": {
     "deploy": "gh-pages -d dist",
-    "dev": "vite",
+    "start": "next start",
+    "dev": "next dev",
     "preview": "vite preview",
     "build": "tsc && vite build",
     "lint": "eslint src/**/*.{ts,tsx,json}",
@@ -48,6 +49,8 @@
     ]
   },
   "dependencies": {
+    "next": "^14.0.2",
+    "next-redux-wrapper": "^8.1.0",
     "@reduxjs/toolkit": "^1.9.7",
     "@vitejs/plugin-react": "^4.1.1",
     "axios": "^1.6.0",

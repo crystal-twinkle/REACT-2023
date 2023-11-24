@@ -6,8 +6,14 @@ interface ISearchState {
 }
 
 export const initialState: ISearchState = {
-  query: localStorage.getItem('search') || '',
-  isSearch: !!localStorage.getItem('search'),
+  query:
+    typeof localStorage !== 'undefined'
+      ? localStorage.getItem('search') || ''
+      : '',
+  isSearch:
+    typeof localStorage !== 'undefined'
+      ? !!localStorage.getItem('search')
+      : false,
 };
 
 export const searchSlice = createSlice({

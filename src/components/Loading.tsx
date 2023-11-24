@@ -1,9 +1,9 @@
-import '../assets/Loading.css';
+import styles from '../assets/Loading.module.css';
 
 const Loading = () => {
   return (
-    <div className="loading">
-      <div className="content">Loading...</div>
+    <div className={styles.loading}>
+      <div className={styles.content}>Loading...</div>
     </div>
   );
 };

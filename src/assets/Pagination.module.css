@@ -1,4 +1,4 @@
-.pagination-wrap {
+.paginationWrap {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -6,12 +6,12 @@
   gap: 20px;
 }
 
-.pagination-btn {
+.paginationBtn {
   display: flex;
   gap: 5px;
 }
 
-.set-posts {
+.setPosts {
   display: flex;
   gap: 5px;
   flex-direction: column;

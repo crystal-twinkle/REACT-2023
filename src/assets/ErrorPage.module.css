@@ -1,4 +1,4 @@
-.error-wrap {
+.errorWrap {
   position: absolute;
   gap: 20px;
   top: 20%;
@@ -15,7 +15,7 @@
   font-size: 1.3rem;
 }
 
-.button-21 {
+.button21 {
   align-items: center;
   background-color: #3eb2fd;
   background-image: linear-gradient(1deg, #4f58fd, #149bf3 99%);
@@ -28,15 +28,15 @@
   padding: 6px 20px;
 }
 
-.button-21:active,
-.button-21:focus {
+.button21:active,
+.button21:focus {
   outline: none;
 }
 
-.button-21:hover {
+.button21:hover {
   background-position: -20px -20px;
 }
 
-.button-21:focus:not(:active) {
+.button21:focus:not(:active) {
   box-shadow: rgba(40, 170, 255, 0.25) 0 0 0 0.125em;
 }

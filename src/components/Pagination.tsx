@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../assets/Pagination.css';
+import styles from '../assets/Pagination.module.css';
 
 interface IPaginationProps {
   changePage: (newPage: number) => void;
@@ -59,27 +59,34 @@ const Pagination = (props: IPaginationProps) => {
   };
 
   return (
-    <div className="pagination-wrap">
-      <div className="pagination-btn">
+    <div className={styles.paginationWrap}>
+      <div className={styles.paginationBtn}>
         <button
           disabled={!isMoveLeft}
-          className={`knob ${isMoveLeft ? 'active' : 'inactive'}`}
+          className={`${styles.knob} ${
+            isMoveLeft ? styles.active : styles.inactive
+          }`}
           onClick={clickLeft}
         >
           <span>&lt;</span>
         </button>
-        <button className="knob current-page active" data-testid="current-page">
+        <button
+          className={`${styles.knob} ${styles.active}`}
+          data-testid="current-page"
+        >
           {page}
         </button>
         <button
           disabled={!isMoveRight}
-          className={`knob ${isMoveRight ? 'active' : 'inactive'}`}
+          className={`${styles.knob} ${
+            isMoveRight ? styles.active : styles.inactive
+          }`}
           onClick={clickRight}
         >
           <span>&gt;</span>
         </button>
       </div>
-      <div className={'set-posts'}>
+      <div className={styles.setPosts}>
         <input
           value={inputValueSetPosts}
           type="number"

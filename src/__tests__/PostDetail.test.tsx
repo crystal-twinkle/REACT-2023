@@ -1,6 +1,6 @@
 import React from 'react';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
-import PostDetail from '../pages/PostDetail';
+import PostDetail from '../components/PostDetail';
 import { renderWithProviders } from './test-utils';
 
 const detailCall = () => {

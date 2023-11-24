@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { screen, fireEvent, waitFor } from '@testing-library/react';
-import Main from '../pages/Main';
+import Main from '../components/Main';
 import { vi } from 'vitest';
 import { renderWithProviders } from './test-utils';
 

@@ -1,27 +1,28 @@
 import React from 'react';
-import { useSearchParams } from 'react-router-dom';
-import Loading from '../components/Loading';
-import { useNavigate } from 'react-router-dom';
-import '../assets/PostDetail.css';
+import styles from '../assets/PostDetail.module.css';
+import { useRouter } from 'next/router';
 import { useGetDetailedCardQuery } from '../services/pokemonAPI';
+import Loading from './Loading';
 
 const PostDetail = () => {
-  const [searchParams] = useSearchParams();
-  const name = searchParams.get('name');
-  const page = searchParams.get('page');
-  const navigate = useNavigate();
+  const router = useRouter();
+  const name = router?.query?.id?.toString();
+  const page = router?.query?.page?.toString();
   const { data, isLoading } = useGetDetailedCardQuery(name || '');
 
   function close() {
-    navigate(`/posts?page=${page}`);
+    router.push({
+      pathname: '',
+      query: { page },
+    });
   }
 
   function description() {
     return (
-      <div className="post-detail-subwrap">
+      <div className={styles.subwrap}>
         {data && (
-          <div className="post-detail">
-            <h4>{data.name}</h4>
+          <div className={styles.postDetail}>
+            <h4 className={styles.name}>{data.name}</h4>
             <div>
               <img src={data.sprites.front_default} alt="front" />
               <img src={data.sprites.back_default} alt="back" />
@@ -29,7 +30,7 @@ const PostDetail = () => {
             </div>
             <p>Height: {data.height}</p>
             <p>Weight: {data.weight}</p>
-            <button className="btn-close" onClick={close}>
+            <button className={styles.btnClose} onClick={close}>
               Close
             </button>
           </div>
@@ -40,8 +41,8 @@ const PostDetail = () => {
 
   return (
     <>
-      <div className={`post-detail-wrap`}>
-        <div onClick={close} className={`blackout`}></div>
+      <div className={styles.wrap}>
+        <div onClick={close} className={styles.blackout}></div>
         {!isLoading ? description() : <Loading />}
       </div>
     </>

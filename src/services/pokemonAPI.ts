@@ -1,5 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import { IPost, IDetailPost } from '../components/models';
+import { HYDRATE } from 'next-redux-wrapper';
 
 interface IGetAllCardsParams {
   limit: number;
@@ -16,6 +17,11 @@ interface IPokemonResponse {
 export const pokemonAPI = createApi({
   reducerPath: 'PokemonAPI',
   baseQuery: fetchBaseQuery({ baseUrl: 'https://pokeapi.co/api/v2/pokemon' }),
+  extractRehydrationInfo(action, { reducerPath }) {
+    if (action.type === HYDRATE) {
+      return action.payload[reducerPath];
+    }
+  },
   endpoints: (builder) => {
     return {
       getAllCards: builder.query<IPokemonResponse, IGetAllCardsParams>({
