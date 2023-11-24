@@ -1,5 +1,5 @@
 import React from 'react';
-import { IPost } from './models';
+import { IPost } from '../types/models';
 import styles from '../assets/PostList.module.css';
 import { useAppSelector } from '../store/redux-hooks';
 import Loading from './Loading';

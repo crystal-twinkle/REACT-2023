@@ -1,15 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { IPost } from '../../components/models';
+import { IPokemonState } from '../../types/models';
 import { pokemonAPI } from '../../services/pokemonAPI';
 
-interface ISomeState {
-  posts: IPost[];
-  loading: boolean;
-  error: boolean;
-  status: string;
-}
-
-const initialState: ISomeState = {
+const initialState: IPokemonState = {
   status: '',
   posts: [],
   loading: true,

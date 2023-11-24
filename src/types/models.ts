@@ -15,3 +15,15 @@ export interface IDetailPost extends IPost {
     back_default: string;
   };
 }
+
+export interface IPokemonState {
+  posts: IPost[];
+  loading: boolean;
+  error: boolean;
+  status: string;
+}
+
+export interface gSSP {
+  cards: IPokemonState;
+  detail: IDetailPost | null;
+}

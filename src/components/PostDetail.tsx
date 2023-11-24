@@ -19,7 +19,7 @@ const PostDetail = () => {
 
   function description() {
     return (
-      <div className={styles.subwrap}>
+      <div>
         {data && (
           <div className={styles.postDetail}>
             <h4 className={styles.name}>{data.name}</h4>
@@ -41,8 +41,8 @@ const PostDetail = () => {
 
   return (
     <>
-      <div className={styles.wrap}>
-        <div onClick={close} className={styles.blackout}></div>
+      <div onClick={close} className={styles.blackout}></div>
+      <div className={styles.postDetailWrap}>
         {!isLoading ? description() : <Loading />}
       </div>
     </>

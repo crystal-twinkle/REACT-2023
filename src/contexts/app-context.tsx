@@ -4,7 +4,7 @@ import React, {
   useState,
   useMemo,
 } from 'react';
-import { IPost } from '../components/models';
+import { IPost } from '../types/models';
 
 export interface IAppContext {
   searchValue: string;

@@ -4,7 +4,7 @@ import { screen, fireEvent } from '@testing-library/react';
 import PostList from '../components/PostList';
 import { vi } from 'vitest';
 import { mockPosts, renderWithProviders } from './test-utils';
-import { IPost } from '../components/models';
+import { IPost } from '../types/models';
 
 const postListCall = (posts: IPost[], error?: boolean) => {
   renderWithProviders(<PostList page={1} dataAll={[]} />, {

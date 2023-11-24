@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { IPost, IDetailPost } from '../components/models';
+import { IPost, IDetailPost } from '../types/models';
 import { HYDRATE } from 'next-redux-wrapper';
 
 interface IGetAllCardsParams {
@@ -42,4 +42,5 @@ export const pokemonAPI = createApi({
   },
 });
 
-export const { useGetAllCardsQuery, useGetDetailedCardQuery } = pokemonAPI;
+export const { useGetAllCardsQuery, useGetDetailedCardQuery, util: { getRunningQueriesThunk } } = pokemonAPI;
+export const { getAllCards, getDetailedCard } = pokemonAPI.endpoints;
