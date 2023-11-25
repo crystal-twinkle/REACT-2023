@@ -11,7 +11,7 @@ export const getServerSideProps: GetServerSideProps<{ data: gSSP }> =
     const pageNumber = Number(page) || 1;
     const limitNumber = Number(limit) || 20;
     const limitNumber2 = search ? 1 : limitNumber;
-    const currentOffset = 1 + limitNumber * pageNumber;
+    const currentOffset = 1 + limitNumber * (pageNumber - 1);
     const searchString = search?.toString() || '';
     store.dispatch(
       getAllCards.initiate({
