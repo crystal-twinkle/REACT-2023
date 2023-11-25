@@ -1,51 +1,30 @@
 import React from 'react';
-import { screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent, render } from '@testing-library/react';
 import Pagination from '../components/Pagination';
-import { vi } from 'vitest';
-import { renderWithProviders } from './test-utils';
+import mockRouter from 'next-router-mock';
 
-const mockChangePage = vi.fn();
-const mockSetCountPosts = vi.fn();
-
-const defaultProps = {
-  changePage: mockChangePage,
-  totalCountPosts: 1201,
-  setCountPosts: mockSetCountPosts,
-  limit: 20,
-};
-
-const paginationCall = (page: number) => {
-  return renderWithProviders(<Pagination {...defaultProps} page={page} />);
+const paginationCall = () => {
+  render(<Pagination />);
 };
 
 describe('Pagination component', () => {
-  it('renders correctly and check not canMoveLeft', () => {
-    paginationCall(1);
-  });
-
   it('handles input changes and clicking Set Posts button', () => {
-    paginationCall(10);
+    paginationCall();
     const inputElement = screen.getByRole('spinbutton');
     const setPostsButton = screen.getByText('Set Posts');
     fireEvent.change(inputElement, { target: { value: 30 } });
     expect(inputElement).toHaveValue(30);
     fireEvent.click(setPostsButton);
-    expect(mockSetCountPosts).toHaveBeenCalledWith(30);
+    expect(mockRouter.query).toEqual({ limit: 30, page: 1 });
   });
 
   it('handles clicking the left and right buttons', () => {
-    const page = 10;
-    paginationCall(page);
-
-    const leftButton = screen.getByText('<');
+    paginationCall();
     const rightButton = screen.getByText('>');
-    fireEvent.click(leftButton);
-    expect(mockChangePage).toHaveBeenCalledWith(page - 1);
+    const leftButton = screen.getByText('<');
     fireEvent.click(rightButton);
-    expect(mockChangePage).toHaveBeenCalledWith(page + 1);
-  });
-
-  it('check not canMoveRight', () => {
-    paginationCall(60);
+    expect(mockRouter.query).toEqual({ limit: 30, page: 2 });
+    fireEvent.click(leftButton);
+    expect(mockRouter.query).toEqual({ limit: 30, page: 1 });
   });
 });

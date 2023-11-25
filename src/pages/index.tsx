@@ -10,13 +10,14 @@ export const getServerSideProps: GetServerSideProps<{ data: gSSP }> =
     const { limit, search, page } = context.query;
     const pageNumber = Number(page) || 1;
     const limitNumber = Number(limit) || 20;
+    const limitNumber2 = search ? 1 : limitNumber;
     const currentOffset = 1 + limitNumber * pageNumber;
     const searchString = search?.toString() || '';
     store.dispatch(
       getAllCards.initiate({
-        limit: limitNumber,
+        limit: limitNumber2,
         offset: currentOffset,
-        query: searchString,
+        search: searchString,
       })
     );
 

@@ -1,14 +1,17 @@
 import React from 'react';
-import { IPokemonState, IPost } from '../types/models';
+import { IPost } from '../types/models';
 import styles from '../assets/PostList.module.css';
 import { useRouter } from 'next/router';
 
 type PostListProps = {
-  cards: IPokemonState;
+  cards: {
+    posts: IPost[];
+    error: boolean;
+  };
 };
 
 const PostList = (props: PostListProps) => {
-  const { error } = props.cards;
+  const { error, posts } = props.cards;
   const router = useRouter();
 
   function notFound() {
@@ -24,7 +27,7 @@ const PostList = (props: PostListProps) => {
       <div style={{ marginTop: '50px' }}>
         <h2 style={{ textAlign: 'center' }}>List</h2>
         <div className={styles.list}>
-          {props.cards.posts.map((post: IPost) => (
+          {posts.map((post: IPost) => (
             <div className={styles.list__element} key={post.name}>
               <p className={styles.list__name}> {post.name}</p>
               <button

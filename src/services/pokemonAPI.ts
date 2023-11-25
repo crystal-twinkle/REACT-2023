@@ -5,7 +5,7 @@ import { HYDRATE } from 'next-redux-wrapper';
 interface IGetAllCardsParams {
   limit: number;
   offset: number;
-  query: string;
+  search: string;
 }
 
 interface IPokemonResponse {
@@ -25,8 +25,8 @@ export const pokemonAPI = createApi({
   endpoints: (builder) => {
     return {
       getAllCards: builder.query<IPokemonResponse, IGetAllCardsParams>({
-        query: ({ limit, offset, query }) => ({
-          url: `/${query}`,
+        query: ({ limit, offset, search }) => ({
+          url: `/${search}`,
           params: {
             limit,
             offset,

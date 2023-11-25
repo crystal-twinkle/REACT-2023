@@ -62,7 +62,7 @@ const Pagination = () => {
   };
 
   return (
-    <div className={styles.paginationWrap}>
+    <div className={styles.paginationWrap} data-tested="pagination-wrap">
       <div className={styles.paginationBtn}>
         <button
           disabled={!isMoveLeft}

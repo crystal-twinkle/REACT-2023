@@ -1,62 +1,32 @@
 import React from 'react';
-import { screen, fireEvent } from '@testing-library/react';
+import { screen, fireEvent, render } from '@testing-library/react';
 import Search from '../components/Search';
-import { renderWithProviders } from './test-utils';
-import {
-  initialState,
-  searchActions,
-  searchReducer,
-} from '../store/reducers/searchSlice';
+import mockRouter from 'next-router-mock';
 
 const searchCall = () => {
-  return renderWithProviders(<Search />);
+  render(<Search />);
 };
 
 describe('Search component', () => {
-  it('click search button', () => {
-    searchCall();
-    const searchButton = screen.getByText('search');
-    fireEvent.click(searchButton);
-  });
-
-  it('Clicking the Search button saves the entered value to the local storage', async () => {
+  it('saves the entered value to the local storage', async () => {
     searchCall();
     const inputElement = screen.getByRole('textbox');
-    fireEvent.change(inputElement, { target: { value: 'test local save' } });
+    fireEvent.change(inputElement, { target: { value: 'test' } });
 
     const localSave = localStorage.getItem('search');
-    expect(localSave).toBe('test local save');
+    expect(localSave).toBe('test');
   });
 
-  it('Should initialize with query from localStorage', async () => {
-    const ls = localStorage.getItem('search');
-    expect(ls).toBe('test local save');
-    const initialSearchState = {
-      search: {
-        query: ls || '',
-        isSearch: !!ls,
-      },
-    };
+  it('check local storage value show in input and clicking search button', () => {
+    const localSave = localStorage.getItem('search');
+    expect(localSave).toBe('test');
 
-    renderWithProviders(<Search />, {
-      preloadedState: {
-        search: initialSearchState.search,
-      },
-    });
-
+    searchCall();
     const inputElement = screen.getByRole('textbox');
-    expect(inputElement).toHaveValue('test local save');
-  });
+    expect(inputElement).toHaveValue(localSave);
 
-  it('check searchSlice', () => {
-    const searchSliceInit = searchReducer(
-      initialState,
-      searchActions.updateSearchQuery(localStorage.getItem('search') || '')
-    );
-    const expectedState = {
-      isSearch: false,
-      query: 'test local save',
-    };
-    expect(searchSliceInit).toEqual(expectedState);
+    const searchButton = screen.getByText('search');
+    fireEvent.click(searchButton);
+    expect(mockRouter.query).toEqual({ search: 'test' });
   });
 });
