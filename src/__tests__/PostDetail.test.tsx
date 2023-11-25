@@ -18,7 +18,7 @@ describe('PostDetail component', () => {
       expect(screen.queryByText('Loading...')).toBeNull();
     });
     await waitFor(() => {
-      screen.getByText(`Pokemon name is Pikachu`);
+      screen.getByText(`Pikachu`);
       screen.getByAltText('front');
       screen.getByText(`Height: ${10}`);
       screen.getByText(`Weight: ${20}`);
