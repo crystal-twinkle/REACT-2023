@@ -42,5 +42,9 @@ export const pokemonAPI = createApi({
   },
 });
 
-export const { useGetAllCardsQuery, useGetDetailedCardQuery, util: { getRunningQueriesThunk } } = pokemonAPI;
+export const {
+  useGetAllCardsQuery,
+  useGetDetailedCardQuery,
+  util: { getRunningQueriesThunk },
+} = pokemonAPI;
 export const { getAllCards, getDetailedCard } = pokemonAPI.endpoints;

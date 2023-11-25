@@ -3,15 +3,13 @@ import {
   configureStore,
   combineReducers,
 } from '@reduxjs/toolkit';
-import { searchReducer } from './reducers/searchSlice';
 import { pokemonAPI } from '../services/pokemonAPI';
 import { pokemonReducer } from './reducers/pokemonSlice';
-import {createWrapper} from 'next-redux-wrapper';
-import {setupListeners} from '@reduxjs/toolkit/query';
+import { createWrapper } from 'next-redux-wrapper';
+import { setupListeners } from '@reduxjs/toolkit/query';
 
 const rootReducer = combineReducers({
   [pokemonAPI.reducerPath]: pokemonAPI.reducer,
-  search: searchReducer,
   pokemon: pokemonReducer,
 });
 

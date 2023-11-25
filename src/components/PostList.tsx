@@ -1,27 +1,15 @@
 import React from 'react';
-import { IPost } from '../types/models';
+import { IPokemonState, IPost } from '../types/models';
 import styles from '../assets/PostList.module.css';
-import { useAppSelector } from '../store/redux-hooks';
-import Loading from './Loading';
 import { useRouter } from 'next/router';
 
 type PostListProps = {
-  page: number;
-  dataAll: IPost[];
+  cards: IPokemonState;
 };
 
 const PostList = (props: PostListProps) => {
-  const { query } = useAppSelector((state) => state.search);
-  const { posts, loading, error } = useAppSelector((state) => state.pokemon);
-  const { dataAll } = props;
+  const { error } = props.cards;
   const router = useRouter();
-
-  let postsCurrent: IPost[];
-  if (query) {
-    postsCurrent = posts;
-  } else {
-    postsCurrent = dataAll;
-  }
 
   function notFound() {
     return (
@@ -36,7 +24,7 @@ const PostList = (props: PostListProps) => {
       <div style={{ marginTop: '50px' }}>
         <h2 style={{ textAlign: 'center' }}>List</h2>
         <div className={styles.list}>
-          {postsCurrent.map((post: IPost) => (
+          {props.cards.posts.map((post: IPost) => (
             <div className={styles.list__element} key={post.name}>
               <p className={styles.list__name}> {post.name}</p>
               <button
@@ -61,7 +49,7 @@ const PostList = (props: PostListProps) => {
     });
   };
 
-  return <>{!loading ? !error ? mainBlock() : notFound() : <Loading />}</>;
+  return <>{!error ? mainBlock() : notFound()}</>;
 };
 
 export default PostList;

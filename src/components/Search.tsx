@@ -1,20 +1,24 @@
 import React, { FormEvent, useState } from 'react';
-import { useActions, useAppSelector } from '../store/redux-hooks';
+import { useRouter } from 'next/router';
 
 const Search = () => {
-  const { updateSearchQuery, setSearchState } = useActions();
-  const { query } = useAppSelector((state) => state.search);
-  const [inputSearchValue, setInputSearchValue] = useState(query);
+  const [inputSearchValue, setInputSearchValue] = useState(
+    typeof localStorage !== 'undefined'
+      ? localStorage.getItem('search') || ''
+      : ''
+  );
+  const router = useRouter();
 
   const inputHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const query = event.target.value;
-    localStorage.setItem('search', query);
-    setInputSearchValue(query);
+    const queryValue = event.target.value;
+    localStorage.setItem('search', queryValue);
+    setInputSearchValue(queryValue);
   };
 
-  const searchClick = () => {
-    updateSearchQuery(inputSearchValue);
-    setSearchState(!!inputSearchValue);
+  const searchClick = async () => {
+    await router.push({
+      query: { ...router.query, search: inputSearchValue },
+    });
   };
 
   return (

@@ -1,60 +1,63 @@
 import React, { useEffect, useState } from 'react';
 import styles from '../assets/Pagination.module.css';
+import { useRouter } from 'next/router';
 
-interface IPaginationProps {
-  changePage: (newPage: number) => void;
-  totalCountPosts: number;
-  setCountPosts: (limit: number) => void;
-  limit: number;
-  page: number;
-}
+const Pagination = () => {
+  const router = useRouter();
+  const { limit, page } = router.query;
+  const pageNumber = Number(page) || 1;
+  const limitNumber = Number(limit) || 20;
 
-const Pagination = (props: IPaginationProps) => {
-  const { changePage, totalCountPosts, setCountPosts, limit, page } = props;
-  const [inputValueSetPosts, setInputValueSetPosts] = useState(20);
+  const [inputSetPosts, setInputSetPosts] = useState(limitNumber);
   const [isMoveRight, setIsMoveRight] = useState(true);
   const [isMoveLeft, setIsMoveLeft] = useState(false);
+  const totalCountPosts = 1200;
 
-  const countTotalPages = Math.ceil((totalCountPosts - 1) / limit);
+  const countTotalPages = Math.ceil(totalCountPosts / limitNumber);
 
   useEffect(() => {
     const setCurrentParameters = () => {
-      setInputValueSetPosts(limit);
-      if (page === 1) {
+      if (pageNumber === 1) {
         setIsMoveLeft(false);
       } else {
         setIsMoveRight(true);
         setIsMoveLeft(true);
       }
-      if (page === countTotalPages) {
+      if (pageNumber === countTotalPages) {
         setIsMoveRight(false);
       }
     };
     setCurrentParameters();
-  }, [page, limit, countTotalPages]);
+  }, [pageNumber, countTotalPages]);
 
-  const inputSetPosts = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const setPostsHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(event.target.value);
     if (value > 0 && value < totalCountPosts) {
-      setInputValueSetPosts(value);
+      setInputSetPosts(value);
     }
   };
 
-  const newSetPosts = () => {
-    if (inputValueSetPosts > 0 && inputValueSetPosts < totalCountPosts) {
-      setCountPosts(inputValueSetPosts);
+  const newSetPosts = async () => {
+    if (inputSetPosts > 0 && inputSetPosts < totalCountPosts) {
+      await router.push({
+        query: { ...router.query, limit: inputSetPosts, page: 1 },
+      });
     }
   };
 
-  const clickLeft = () => {
-    if (page !== 1) {
-      changePage(page - 1);
+  const clickLeft = async () => {
+    if (pageNumber !== 1) {
+      await router.push({
+        query: { ...router.query, page: pageNumber - 1 },
+      });
     }
   };
 
-  const clickRight = () => {
-    if (page !== countTotalPages) {
-      changePage(page + 1);
+  const clickRight = async () => {
+    if (pageNumber !== countTotalPages) {
+      await router.push({
+        query: { ...router.query, page: pageNumber + 1 },
+      });
     }
   };
 
@@ -88,12 +91,12 @@ const Pagination = (props: IPaginationProps) => {
       </div>
       <div className={styles.setPosts}>
         <input
-          value={inputValueSetPosts}
+          value={inputSetPosts}
           type="number"
           step="1"
           min="1"
           max={totalCountPosts}
-          onChange={inputSetPosts}
+          onChange={setPostsHandler}
         />
         <button onClick={newSetPosts}>Set Posts</button>
       </div>

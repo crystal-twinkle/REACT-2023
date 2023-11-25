@@ -25,5 +25,4 @@ export interface IPokemonState {
 
 export interface gSSP {
   cards: IPokemonState;
-  detail: IDetailPost | null;
 }
