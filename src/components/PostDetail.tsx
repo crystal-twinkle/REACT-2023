@@ -22,7 +22,7 @@ const PostDetail = () => {
       <div onClick={close} className={styles.blackout}></div>
       <div className={styles.postDetailWrap}>
         <div className={styles.postDetail}>
-          {!isLoading && <Loading />}
+          {isLoading && <Loading />}
           {data && (
             <>
               <h4 className={styles.name}>{data.name}</h4>
