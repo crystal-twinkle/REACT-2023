@@ -3,40 +3,19 @@ import { screen, fireEvent, waitFor } from '@testing-library/react';
 import PostDetail from '../components/PostDetail';
 import { renderWithProviders } from './utils/renderWithProviders';
 import { vi } from 'vitest';
-import { setupServer } from 'msw/node';
-import { http, HttpResponse } from 'msw';
 
+const mockPush = vi.fn();
 vi.mock('next/router', () => ({
   useRouter() {
     return {
       route: '',
       pathname: '',
-      query: { id: 'ivysaur' },
+      query: { page: 1, limit: 20, id: 'ivysaur' },
       asPath: '',
-      push: vi.fn(),
+      push: mockPush,
     };
   },
 }));
-
-const server = setupServer(
-  http.get('https://pokeapi.co/api/v2/pokemon/:name', ({ params }) => {
-    const { name } = params;
-    return HttpResponse.json({
-      name,
-      sprites: {
-        front_default: 'front_default_url',
-        back_default: 'back_default_url',
-        front_shiny: 'front_shiny_url',
-      },
-      height: 10,
-      weight: 20,
-    });
-  })
-);
-
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
 
 const detailCall = () => {
   return renderWithProviders(<PostDetail />);
@@ -67,5 +46,13 @@ describe('PostDetail component', () => {
     fireEvent.click(closeButton);
     const postDetailElement = screen.queryByTestId('post-detail-wrap');
     expect(postDetailElement).not.toBeInTheDocument();
+    expect(mockPush).toHaveBeenCalledWith(
+      expect.objectContaining({
+        pathname: '',
+        query: expect.objectContaining({
+          page: '1',
+        }),
+      })
+    );
   });
 });

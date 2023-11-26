@@ -1,4 +1,6 @@
 import { gSSP, IPost } from '../../types/models';
+import { GetServerSidePropsContext } from 'next';
+import { createRequest, createResponse } from 'node-mocks-http';
 
 interface ISetTestProps {
   posts: IPost[];
@@ -25,3 +27,14 @@ export const setTestProps = (props: Partial<ISetTestProps> = {}) => {
   };
   return gSSPTestProps;
 };
+
+export const gsspCtx = (
+  ctx?: Partial<GetServerSidePropsContext>
+): GetServerSidePropsContext => ({
+  req: createRequest(),
+  res: createResponse(),
+  params: undefined,
+  query: {},
+  resolvedUrl: '',
+  ...ctx,
+});

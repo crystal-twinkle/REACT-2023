@@ -1,10 +1,11 @@
 import { RouterContext } from 'next/dist/shared/lib/router-context.shared-runtime';
 import { createMockRouter } from './utils/createMockRouter';
-import HomePage from '../pages';
+import HomePage, { getServerSideProps } from '../pages';
 import { setTestProps } from './utils/forMock';
 import React from 'react';
 import { screen, waitFor, render } from '@testing-library/react';
 import { vi } from 'vitest';
+import { gsspCtx } from './utils/forMock';
 
 const useRouter = vi.spyOn(require('next/router'), 'useRouter');
 
@@ -32,5 +33,16 @@ describe('Test Home Page', () => {
     render(<HomePage data={setTestProps({ error: true })} />);
     expect(screen.getByText('No posts found!')).toBeInTheDocument();
     expect(screen.queryByTestId('pagination-wrap')).toBeNull();
+  });
+
+  it('If the data acquisition is successful, elements will be displayed', async () => {
+    const res = await getServerSideProps(gsspCtx());
+    if ('props' in res && 'data' in res.props) {
+      const data = res.props.data;
+      render(<HomePage data={data} />);
+      ['bulbasaur', 'charmander', 'pikachu', 'ivysaur'].forEach((name) => {
+        expect(screen.getByText(name)).toBeInTheDocument();
+      });
+    }
   });
 });
