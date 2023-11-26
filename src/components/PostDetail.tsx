@@ -17,33 +17,28 @@ const PostDetail = () => {
     });
   }
 
-  function description() {
-    return (
-      <div>
-        {data && (
-          <div className={styles.postDetail}>
-            <h4 className={styles.name}>{data.name}</h4>
-            <div>
-              <img src={data.sprites.front_default} alt="front" />
-              <img src={data.sprites.back_default} alt="back" />
-              <img src={data.sprites.front_shiny} alt="shiny" />
-            </div>
-            <p>Height: {data.height}</p>
-            <p>Weight: {data.weight}</p>
-            <button className={styles.btnClose} onClick={close}>
-              Close
-            </button>
-          </div>
-        )}
-      </div>
-    );
-  }
-
   return (
     <>
       <div onClick={close} className={styles.blackout}></div>
       <div className={styles.postDetailWrap}>
-        {!isLoading ? description() : <Loading />}
+        <div className={styles.postDetail}>
+          {!isLoading && <Loading />}
+          {data && (
+            <>
+              <h4 className={styles.name}>{data.name}</h4>
+              <div>
+                <img src={data.sprites.front_default} alt="front" />
+                <img src={data.sprites.back_default} alt="back" />
+                <img src={data.sprites.front_shiny} alt="shiny" />
+              </div>
+              <p>Height: {data.height}</p>
+              <p>Weight: {data.weight}</p>
+              <button className={styles.btnClose} onClick={close}>
+                Close
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </>
   );
