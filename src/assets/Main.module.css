@@ -1,9 +1,10 @@
 .wrap {
-  flex-grow: 1;
   display: flex;
 }
 
 .main {
+  max-width: 1480px;
+  margin: auto;
   width: 50%;
   flex-grow: 1;
 }

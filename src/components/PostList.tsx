@@ -24,7 +24,7 @@ const PostList = (props: PostListProps) => {
 
   function mainBlock() {
     return (
-      <div style={{ marginTop: '50px' }}>
+      <div className={styles.wrap}>
         <h2 style={{ textAlign: 'center' }}>List</h2>
         <div className={styles.list}>
           {posts.map((post: IPost) => (
