@@ -12,7 +12,9 @@ body {
 }
 
 .app {
-  margin: 2rem;
+  max-width: 1480px;
+  margin: 2rem auto;
+  padding: 2vw;
   min-height: 100vh;
   font-family: 'Neucha', cursive;
 }
