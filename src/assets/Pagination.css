@@ -1,0 +1,36 @@
+.pagination-wrap {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 15px 0;
+  gap: 20px;
+}
+
+.pagination-btn {
+  display: flex;
+  gap: 5px;
+}
+
+.set-posts {
+  display: flex;
+  gap: 5px;
+  flex-direction: column;
+}
+
+.knob {
+  width: 52px;
+  height: 52px;
+  border-radius: 100%;
+}
+
+.inactive {
+  border: 2px solid #cdcdcd;
+  color: #cdcdcd;
+  background-color: #ffffff;
+  cursor: default;
+}
+
+.active {
+  background-color: #ffffff;
+  border: 2px solid #f1cdb3;
+}

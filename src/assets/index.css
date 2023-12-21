@@ -1,0 +1,15 @@
+body {
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  background-image: linear-gradient(
+    120deg,
+    rgba(224, 212, 212, 0.75) 0%,
+    rgba(224, 213, 213, 0.61) 100%
+  );
+}

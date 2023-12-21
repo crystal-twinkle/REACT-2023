@@ -1,0 +1,43 @@
+.app {
+  max-width: 1480px;
+  margin: 0 auto;
+  padding: 2rem 2rem 0 2rem;
+  width: 100vw;
+  min-height: 100vh;
+  opacity: 1;
+  font-family: 'Neucha', cursive;
+}
+
+.search-form {
+  width: 275px;
+}
+
+.input {
+  width: 80%;
+  padding: 5px 15px;
+  margin: 5px 0;
+  border: 1px solid teal;
+}
+
+button {
+  cursor: pointer;
+}
+
+.error-btn {
+  position: absolute;
+  top: 7%;
+  right: 20%;
+  background-color: rgba(255, 0, 38, 0.93);
+  color: #fff;
+  background-image: linear-gradient(92.83deg, #ff7426 0, #f93a13 100%);
+  cursor: pointer;
+  border-style: none;
+  border-radius: 80px;
+  padding: 10px;
+}
+
+@media (max-width: 570px) {
+  .error-btn {
+    top: 12%;
+  }
+}

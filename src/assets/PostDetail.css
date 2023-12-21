@@ -1,0 +1,61 @@
+.post-detail_wrap {
+  position: fixed;
+  flex-direction: column;
+  display: flex;
+  top: 0;
+  right: 0;
+  background: rgba(41, 41, 41);
+  color: #e0dada;
+  padding: 20px;
+  z-index: 5;
+  animation: fade-in 0.5s ease-in-out;
+  width: 50%;
+  height: 100%;
+}
+
+.img-detail {
+  transform: scale(1.2);
+}
+
+.post-detail {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin: 0 auto;
+}
+
+h4 {
+  margin: 0;
+}
+
+.btn-close {
+  padding: 10px;
+  background-color: red;
+  border: none;
+  border-radius: 20px;
+  margin: 10px auto;
+}
+
+.blackout {
+  display: none;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background: rgba(41, 41, 41, 0.6);
+}
+
+.blackout-show {
+  z-index: 2;
+  display: block;
+}
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
