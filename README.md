@@ -1,5 +1,7 @@
 # Pokemon
 
+[Link on deploy]([https://javascript-wizards.netlify.app/](https://test-next-js--neon-madeleine-1b86ab.netlify.app/).
+
 The app provides the following features:
 
 1. *Search Pokémon by name*: Users can easily search for Pokémon by entering their names, making it convenient to find specific Pokémon within the application.
