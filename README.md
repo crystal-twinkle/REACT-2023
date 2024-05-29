@@ -1,6 +1,7 @@
 # Pokemon
 
-[Link on deploy]([https://javascript-wizards.netlify.app/](https://test-next-js--neon-madeleine-1b86ab.netlify.app/).
+[Link on deploy]((https://pokemons-wizards.netlify.app/?page=1&limit=20)
+)).
 
 The app provides the following features:
 
