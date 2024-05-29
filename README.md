@@ -1,7 +1,6 @@
 # Pokemon
 
 [Link on deploy](https://pokemons-wizards.netlify.app/?page=1&limit=20)
-)).
 
 The app provides the following features:
 
